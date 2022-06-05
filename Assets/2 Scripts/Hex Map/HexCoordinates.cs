@@ -45,6 +45,19 @@ namespace Osiris
             return new HexCoordinates(iX, iZ);
         }
 
+        public int DistanceTo(HexCoordinates other) {
+            return
+                ((x < other.x ? other.x - x : x - other.x) +
+                (y < other.y ? other.y - y : y - other.y) +
+                (z < other.z ? other.z - z : z - other.z)) / 2;
+
+            //int xy =
+            //    (x < other.x ? other.x - x : x - other.x) +
+            //    (y < other.y ? other.y - y : y - other.y);
+
+            //return (xy + (z < other.z ? other.z - z : z - other.z)) / 2;
+        }
+
         public bool Equals(HexCoordinates other) {
             return x.Equals(other.x) && z.Equals(other.z);
         }

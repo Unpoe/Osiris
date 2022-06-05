@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa6e7f27ba194cb4f934d65f49a12b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardView: {fileID: 926810896}
+  grid: {fileID: 926810896}
   actorFactory: {fileID: 567485395}
   mapWidth: 8
   mapHeight: 6
@@ -213,6 +213,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actorPrefab: {fileID: 4613670576249831575, guid: 8cef0182c4c8039428f2cc8bbcd5c7b0,
+    type: 3}
+  dummyActorPrefab: {fileID: 7443291628687930641, guid: b6eb5bb95949824448cd79983c6bc5e4,
     type: 3}
 --- !u!1 &705507993
 GameObject:
@@ -332,10 +334,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 926810895}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29dad122f1285ef448efdcfe60ad2706, type: 3}
+  m_Script: {fileID: 11500000, guid: fdb726d8cb1d93b4bb1e3d7592cbbd34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hexViewPrefab: {fileID: 7514445231342617764, guid: 3931700d5abad984a992adf929c3b7c9,
+  hexPrefab: {fileID: 4583671076124398638, guid: 3931700d5abad984a992adf929c3b7c9,
     type: 3}
 --- !u!4 &926810897
 Transform:

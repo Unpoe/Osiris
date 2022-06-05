@@ -1,13 +1,20 @@
-﻿namespace Osiris
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+namespace Osiris
 {
-    public class HexGrid
+    public class HexGrid : MonoBehaviour
     {
-        public readonly int width;
-        public readonly int height;
+        [SerializeField] private HexCell hexPrefab = default;
 
-        public readonly HexCell[] cells;
+        public int width { get; private set; }
+        public int height { get; private set; }
 
-        public HexGrid(int width, int height) {
+        private HexCell[] cells = null;
+
+        private HexCellPriorityQueue searchFrontier;
+
+        public void Initialize(int width, int height) {
             this.width = width;
             this.height = height;
 
@@ -15,7 +22,8 @@
 
             for (int z = 0, i = 0; z < height; z++) {
                 for (int x = 0; x < width; x++) {
-                    HexCell cell = cells[i] = new HexCell(x, z, i++);
+                    HexCell cell = cells[i] = Instantiate(hexPrefab, transform);
+                    cell.Initialize(x, z, i);
 
                     // Connecting Neighbors
                     if(x > 0) { // Connecting from east to west
@@ -36,12 +44,78 @@
                             }
                         }
                     }
+
+                    i++;
                 }
             }
         }
 
         public HexCell GetCell(int x, int z) {
             return cells[x + z * width];
+        }
+
+        public bool FindPath(HexCell fromCell, HexCell toCell, Actor actor, ref List<HexCell> path) {
+            // The frontier is a collection to keep track of which cells we have to visit
+            if (searchFrontier == null) {
+                searchFrontier = new HexCellPriorityQueue();
+            } else {
+                searchFrontier.Clear();
+            }
+
+            path.Clear();
+            for (int i = 0; i < cells.Length; i++) {
+                cells[i].Distance = int.MaxValue;
+            }
+
+            // We add the first cell into the frontier
+            fromCell.Distance = 0;
+            searchFrontier.Enqueue(fromCell);
+            // We loop until we do not have anything else to check
+            while (searchFrontier.Count > 0) {
+                HexCell current = searchFrontier.Dequeue();
+
+                if(current == toCell) { // We have found the path
+                    path.Add(current);
+                    current = current.PathFrom;
+                    while (current != fromCell) {
+                        path.Add(current);
+                        current = current.PathFrom;
+                    }
+                    path.Add(fromCell);
+                    path.Reverse();
+                    return true;
+                }
+
+                // We loop through the neighbours and add them to the frontier (if needed)
+                for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+                    HexCell neighbor = current.GetNeighbor(d);
+
+                    if (neighbor == null) {
+                        continue;
+                    }
+
+                    // We can't go to cells with actors in it
+                    //if (!neighbor.IsEmpty()) {
+                    //    continue;
+                    //}
+
+                    int distance = current.Distance + 1;
+
+                    if (neighbor.Distance == int.MaxValue) { // If the neighbor have not been visited
+                        neighbor.Distance = distance;
+                        neighbor.PathFrom = current;
+                        neighbor.SearchHeuristic = neighbor.coordinates.DistanceTo(toCell.coordinates);
+                        searchFrontier.Enqueue(neighbor);
+                    } else if (distance < neighbor.Distance) { // If we found a shortest path, update it
+                        int oldPriority = neighbor.SearchPriority;
+                        neighbor.Distance = distance;
+                        neighbor.PathFrom = current;
+                        searchFrontier.Change(neighbor, oldPriority);
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

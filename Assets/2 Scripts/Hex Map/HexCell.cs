@@ -1,18 +1,37 @@
 ﻿using UnityEngine;
+using TMPro;
 
 namespace Osiris
 {
-    public class HexCell
+    public class HexCell : MonoBehaviour
     {
-        public readonly HexCoordinates coordinates;
-        public readonly Vector3 worldPosition;
-        public readonly int index;
+        [SerializeField] private TextMeshProUGUI coordinatesLabel = default;
+        [SerializeField] private Renderer cellRenderer = default;
+
+        public HexCoordinates coordinates { get; private set; }
+        public Vector3 worldPosition { get; private set; }
+        public int index { get; private set; }
 
         private HexCell[] neighbors;
 
+        [System.NonSerialized]
         public Actor actor;
 
-        public HexCell(int x, int z, int i) {
+        // Pathfinding
+        public int Distance { get; set; } // Distance between this cell and the origin one
+        public HexCell PathFrom { get; set; } // The cell from which we set the distance, used to reconstruct the path after the pathfinding
+        public int SearchHeuristic { get; set; } // This heuristic represents the best guess of the remaining distance
+        public int SearchPriority {
+            get {
+                return Distance + SearchHeuristic;
+            }
+        }
+        public HexCell NextWithSamePriority { get; set; }
+
+        private static int colorPropertyId = Shader.PropertyToID("_Color");
+        private static MaterialPropertyBlock sharedPropertyBlock;
+
+        public void Initialize(int x, int z, int i) {
             coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
 
             Vector3 position;
@@ -25,6 +44,10 @@ namespace Osiris
             neighbors = new HexCell[6]; // One for each HexDirection
 
             actor = null;
+
+            transform.localPosition = worldPosition;
+            transform.localScale = Vector3.one * (HexMetrics.outerRadius * 2f);
+            coordinatesLabel.text = coordinates.ToStringOnSeparateLines();
         }
 
         public HexCell GetNeighbor(HexDirection direction) {
@@ -36,8 +59,30 @@ namespace Osiris
             cell.neighbors[(int)direction.Opposite()] = this;
         }
 
+        /// <summary>
+        /// Returns true if there is not any actor in this cell.
+        /// </summary>
         public bool IsEmpty() {
             return actor == null;
+        }
+
+        public void SetColor(Color color) {
+            if (sharedPropertyBlock == null) {
+                sharedPropertyBlock = new MaterialPropertyBlock();
+            }
+            sharedPropertyBlock.SetColor(colorPropertyId, color);
+            cellRenderer.SetPropertyBlock(sharedPropertyBlock);
+        }
+
+        public static HexDirection GetDirection(HexCell fromCell, HexCell toCell) {
+            for(int i = 0; i < fromCell.neighbors.Length; i++) {
+                HexCell neighbor = fromCell.neighbors[i];
+                if(neighbor != null && neighbor == toCell) {
+                    return (HexDirection)i;
+                }
+            }
+
+            return HexDirection.NE;
         }
     }
 }

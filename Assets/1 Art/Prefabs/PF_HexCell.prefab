@@ -704,9 +704,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7514445231342617765}
-  - component: {fileID: 7514445231342617764}
+  - component: {fileID: 4583671076124398638}
   m_Layer: 0
-  m_Name: PF_HexView
+  m_Name: PF_HexCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -727,7 +727,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7514445231342617764
+--- !u!114 &4583671076124398638
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -736,10 +736,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7514445231342617766}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4277454e30a351e4abd66cd962c76075, type: 3}
+  m_Script: {fileID: 11500000, guid: 912a3aa8b35584b48a48012a8650351b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   coordinatesLabel: {fileID: 7514445231543160141}
+  cellRenderer: {fileID: 7514445230544214573}
 --- !u!1 &7514445231427572931
 GameObject:
   m_ObjectHideFlags: 0
