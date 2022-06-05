@@ -6,9 +6,15 @@ namespace Osiris
 {
     public class Actor : MonoBehaviour
     {
+        [SerializeField] private ActorAnimationConfig animationConfig = default;
+        [SerializeField] private Animator unityAnimator = default;
+
+        private ActorAnimator animator;
+
         private bool ally;
         private int hp;
         private int range;
+        private float speed;
 
         private Func<bool, List<Actor>> getActors;
         public delegate bool FindPathDelegate(HexCell fromCell , HexCell toCell, Actor actor, ref List<HexCell> path);
@@ -23,10 +29,20 @@ namespace Osiris
         private float progress = 0f;
         private List<HexCell> currentPath = new List<HexCell>();
 
+        public void GameAwake() {
+            animator = new ActorAnimator();
+            animator.Configure(unityAnimator, animationConfig);
+        }
+
+        private void OnDestroy() {
+            animator.Destroy();
+        }
+
         public void Initialize(bool isAlly, int maxHP, HexCell startingCell, HexDirection startingDir, Func<bool, List<Actor>> getActors, FindPathDelegate findPath) {
             ally = isAlly;
             hp = maxHP;
             range = 1;
+            speed = 1f;
 
             this.getActors = getActors;
             this.findPath = findPath;
@@ -40,9 +56,17 @@ namespace Osiris
             SetDirection(startingDir);
 
             progress = 0f;
+
+            animator.Play(speed);
+        }
+
+        public void Clear() {
+            animator.Stop();
         }
 
         public virtual bool GameUpdate(float dt) {
+            animator.GameUpdate(dt);
+
             // Check for death
             if(hp <= 0) {
                 return false;
@@ -71,7 +95,7 @@ namespace Osiris
             } else {
                 // Update movement
                 if (moving) {
-                    progress += dt;
+                    progress += speed * dt;
                     while (progress >= 1f) {
                         currentCell.actor = null;
                         currentCell = nextCell;

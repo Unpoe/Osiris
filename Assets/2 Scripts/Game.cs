@@ -26,7 +26,7 @@ namespace Osiris
             grid.Initialize(mapWidth, mapHeight);
 
             AddActor(0, 0, true, false);
-            AddActor(3, 5, false, false);
+            AddActor(3, 5, false, true);
         }
 
         private void Update() {
@@ -55,6 +55,7 @@ namespace Osiris
             for (int i = 0; i < actors.Count; i++) {
                 Actor actor = actors[i];
                 if (!actor.GameUpdate(dt)) {
+                    actor.Clear();
                     int lastIndex = actors.Count - 1;
                     actors[i] = actors[lastIndex];
                     actors.RemoveAt(lastIndex);

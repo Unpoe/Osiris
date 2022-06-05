@@ -11,11 +11,13 @@ namespace Osiris
         private List<Actor> instances = new List<Actor>();
 
         public Actor Get(bool dummy) {
+            Actor instance;
             if (dummy) {
-                return Instantiate(dummyActorPrefab, transform);
+                instance = Instantiate(dummyActorPrefab, transform);
+                instance.GameAwake();
+                return instance;
             }
 
-            Actor instance;
             if(instances.Count > 0) {
                 instance = instances[0];
                 instances.Remove(instance);
@@ -23,6 +25,7 @@ namespace Osiris
                 instance.gameObject.SetActive(true);
             } else {
                 instance = Instantiate(actorPrefab, transform);
+                instance.GameAwake();
             }
 
             return instance;
