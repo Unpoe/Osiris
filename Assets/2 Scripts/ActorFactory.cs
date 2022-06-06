@@ -5,18 +5,23 @@ namespace Osiris
 {
     public class ActorFactory : MonoBehaviour
     {
-        [SerializeField] private Actor actorPrefab = default;
-        [SerializeField] private DummyActor dummyActorPrefab = default;
+        [SerializeField] private Actor[] prefabs = default;
 
-        private List<Actor> instances = new List<Actor>();
+        private List<Actor>[] actorInstances = null;
 
-        public Actor Get(bool dummy) {
+        public void Initialize() {
+            actorInstances = new List<Actor>[prefabs.Length];
+        }
+
+        public Actor Get(ActorId actorId) {
             Actor instance;
-            if (dummy) {
-                instance = Instantiate(dummyActorPrefab, transform);
-                instance.GameAwake();
-                return instance;
+
+            int id = (int)actorId;
+            List<Actor> instances;
+            if(actorInstances[id] == null) {
+                actorInstances[id] = new List<Actor>();
             }
+            instances = actorInstances[id];
 
             if(instances.Count > 0) {
                 instance = instances[0];
@@ -24,7 +29,7 @@ namespace Osiris
 
                 instance.gameObject.SetActive(true);
             } else {
-                instance = Instantiate(actorPrefab, transform);
+                instance = Instantiate(prefabs[id], transform);
                 instance.GameAwake();
             }
 
@@ -32,11 +37,12 @@ namespace Osiris
         }
 
         public void Reclaim(Actor actor) {
-            DummyActor dummyActor = actor as DummyActor;
-            if(dummyActor != null) {
-                Destroy(dummyActor.gameObject);
-                return;
+            int id = (int)actor.Id;
+            List<Actor> instances;
+            if (actorInstances[id] == null) {
+                actorInstances[id] = new List<Actor>();
             }
+            instances = actorInstances[id];
 
             instances.Add(actor);
             actor.gameObject.SetActive(false);

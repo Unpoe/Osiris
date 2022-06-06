@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5905788209922963920}
-  - component: {fileID: 4613670576249831575}
+  - component: {fileID: 6099620526822844349}
   m_Layer: 0
   m_Name: PF_Actor_Waifu
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4613670576249831575
+--- !u!114 &6099620526822844349
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,10 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5905788209922963923}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dc1312161fb16944a8d2060561d8e89, type: 3}
+  m_Script: {fileID: 11500000, guid: 94bae0c7cb3e40a4a8ccabc5d267e75b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationConfig: {fileID: 11400000, guid: 50c5ff7b4f72986459461273e9151c56, type: 2}
+  actorDefinition: {fileID: 11400000, guid: 1bb8d575b874f3446b4e28bf7a29790d, type: 2}
   unityAnimator: {fileID: 44761940938524752}
 --- !u!1 &5905788210149668220
 GameObject:
@@ -143,6 +143,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MDL_Actor_Waifu
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: b8aca712790fa164ba63f569c3789e65,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8aca712790fa164ba63f569c3789e65, type: 3}

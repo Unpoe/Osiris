@@ -5,6 +5,8 @@ namespace Osiris
 {
     public class Game : MonoBehaviour
     {
+        [SerializeField, Range(1, 10)] private float timeScale = 1f;
+        [Space]
         [SerializeField] private HexGrid grid = default;
         [SerializeField] private ActorFactory actorFactory = default;
         [Space]
@@ -22,26 +24,52 @@ namespace Osiris
             CustomRandom.SetSeed(0);
 
             gold = new Gold(initialGold);
-
             grid.Initialize(mapWidth, mapHeight);
+            actorFactory.Initialize();
 
-            AddActor(0, 0, true, false);
-            AddActor(3, 5, false, true);
+            NewGame();
         }
 
         private void Update() {
-            float dt = Time.deltaTime;
+            if (Input.GetKeyDown(KeyCode.N)) {
+                ClearGame();
+                NewGame();
+                return;
+            }
+
+            float dt = Time.deltaTime * timeScale;
 
             UpdateActorList(dt, ref allyActors);
             UpdateActorList(dt, ref enemyActors);
         }
 
-        private void AddActor(int x, int z, bool isAlly, bool dummy) {
-            Actor newActor = actorFactory.Get(dummy);
+        private void NewGame() {
+            AddActor(0, 0, true, ActorId.Vampire);
+            AddActor(3, 5, false, ActorId.Waifu);
+        }
+
+        private void ClearGame() {
+            for(int i = allyActors.Count - 1; i >= 0; i--) {
+                Actor actor = allyActors[i];
+                actor.Clear();
+                actorFactory.Reclaim(actor);
+            }
+            allyActors.Clear();
+
+            for (int i = enemyActors.Count - 1; i >= 0; i--) {
+                Actor actor = enemyActors[i];
+                actor.Clear();
+                actorFactory.Reclaim(actor);
+            }
+            enemyActors.Clear();
+        }
+
+        private void AddActor(int x, int z, bool isAlly, ActorId actorId) {
+            Actor newActor = actorFactory.Get(actorId);
             HexCell startingCell = grid.GetCell(x, z);
             HexDirection startingDir = isAlly ? HexDirection.NE : HexDirection.SW;
 
-            newActor.Initialize(isAlly, 10, startingCell, startingDir, GetActorList, grid.FindPath);
+            newActor.Initialize(isAlly, startingCell, startingDir, GetActorList, grid.FindPath);
 
             List<Actor> actors = GetActorList(isAlly);
             actors.Add(newActor);

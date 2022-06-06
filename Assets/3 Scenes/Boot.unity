@@ -212,10 +212,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 131310b53bb9d0a409221a25b57d6a0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actorPrefab: {fileID: 4613670576249831575, guid: 8cef0182c4c8039428f2cc8bbcd5c7b0,
-    type: 3}
-  dummyActorPrefab: {fileID: 7443291628687930641, guid: b6eb5bb95949824448cd79983c6bc5e4,
-    type: 3}
+  prefabs:
+  - {fileID: 6099620526822844349, guid: 8cef0182c4c8039428f2cc8bbcd5c7b0, type: 3}
+  - {fileID: 4613670576249831575, guid: 31d7b68ca0dbf2544979711ac340d753, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

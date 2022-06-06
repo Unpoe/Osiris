@@ -6,15 +6,16 @@ namespace Osiris
 {
     public class Actor : MonoBehaviour
     {
-        [SerializeField] private ActorAnimationConfig animationConfig = default;
+        [SerializeField] private ActorDefinition actorDefinition = default;
         [SerializeField] private Animator unityAnimator = default;
 
         private ActorAnimator animator;
 
         private bool ally;
-        private int hp;
+        private float hp;
         private int range;
         private float speed;
+        private float attackSpeed; // attacks per second
 
         private Func<bool, List<Actor>> getActors;
         public delegate bool FindPathDelegate(HexCell fromCell , HexCell toCell, Actor actor, ref List<HexCell> path);
@@ -29,20 +30,23 @@ namespace Osiris
         private float progress = 0f;
         private List<HexCell> currentPath = new List<HexCell>();
 
+        public ActorId Id => actorDefinition.Id;
+
         public void GameAwake() {
             animator = new ActorAnimator();
-            animator.Configure(unityAnimator, animationConfig);
+            animator.Configure(unityAnimator, actorDefinition.AnimationConfig);
         }
 
         private void OnDestroy() {
             animator.Destroy();
         }
 
-        public void Initialize(bool isAlly, int maxHP, HexCell startingCell, HexDirection startingDir, Func<bool, List<Actor>> getActors, FindPathDelegate findPath) {
+        public void Initialize(bool isAlly, HexCell startingCell, HexDirection startingDir, Func<bool, List<Actor>> getActors, FindPathDelegate findPath) {
             ally = isAlly;
-            hp = maxHP;
-            range = 1;
-            speed = 1f;
+            hp = actorDefinition.Hp;
+            range = actorDefinition.Range;
+            speed = actorDefinition.Speed;
+            attackSpeed = actorDefinition.AttackSpeed;
 
             this.getActors = getActors;
             this.findPath = findPath;
@@ -57,7 +61,7 @@ namespace Osiris
 
             progress = 0f;
 
-            animator.Play(speed);
+            animator.PlayIdle();
         }
 
         public void Clear() {
@@ -82,7 +86,9 @@ namespace Osiris
 
                 if (target == null) {
                     // We do not have a target, just idle
-                    Debug.Log("Idle");
+                    if (animator.CurrentClip != ActorAnimator.Clip.Idle) {
+                        animator.PlayIdle();
+                    }
                     return true;
                 }
             }
@@ -91,7 +97,9 @@ namespace Osiris
             bool isTargetInRange = currentCell.coordinates.DistanceTo(target.currentCell.coordinates) <= range;
             if (isTargetInRange) {
                 // Update attack
-                Debug.Log("Attacking");
+                if (animator.CurrentClip != ActorAnimator.Clip.Attack) {
+                    animator.PlayAttack(attackSpeed);
+                }
             } else {
                 // Update movement
                 if (moving) {
@@ -120,6 +128,9 @@ namespace Osiris
                     nextCell = GetNextCell();
                     SetDirection(HexCell.GetDirection(currentCell, nextCell));
                     moving = nextCell != null;
+                    if (moving) {
+                        animator.PlayWalk(speed);
+                    }
                 }
             }
 
