@@ -30,7 +30,7 @@ namespace Osiris
             mixer.ConnectInput((int)Clip.Walk, clip, 0);
             // Configure Attack
             clip = AnimationClipPlayable.Create(graph, config.Attack);
-            clip.SetDuration(config.Attack.length); // For non looping animations, we need to configure the duration
+            //clip.SetDuration(config.Attack.length); // For non looping animations, we need to configure the duration
             clip.Pause();
             mixer.ConnectInput((int)Clip.Attack, clip, 0);
 

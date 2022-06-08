@@ -164,6 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa6e7f27ba194cb4f934d65f49a12b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeScale: 1
   grid: {fileID: 926810896}
   actorFactory: {fileID: 567485395}
   mapWidth: 8
@@ -213,7 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs:
-  - {fileID: 6099620526822844349, guid: 8cef0182c4c8039428f2cc8bbcd5c7b0, type: 3}
+  - {fileID: 6061764549035699030, guid: 8cef0182c4c8039428f2cc8bbcd5c7b0, type: 3}
   - {fileID: 4613670576249831575, guid: 31d7b68ca0dbf2544979711ac340d753, type: 3}
 --- !u!1 &705507993
 GameObject:

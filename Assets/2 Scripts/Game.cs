@@ -44,8 +44,10 @@ namespace Osiris
         }
 
         private void NewGame() {
-            AddActor(0, 0, true, ActorId.Vampire);
-            AddActor(3, 5, false, ActorId.Waifu);
+            AddActor(0, 0, true, ActorId.Waifu);
+            //AddActor(2, 1, true, ActorId.Waifu);
+            //AddActor(4, 0, true, ActorId.Waifu);
+            AddActor(3, 5, false, ActorId.Vampire);
         }
 
         private void ClearGame() {
