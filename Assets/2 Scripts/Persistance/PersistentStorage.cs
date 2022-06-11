@@ -20,6 +20,10 @@ namespace Osiris.Persistance
         }
 
         public void Load(IPersistableObject o) {
+            if (!File.Exists(savePath)) {
+                return;
+            }
+
             using (
                 var reader = new BinaryReader(File.Open(savePath, FileMode.Open))
             ) {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Osiris
 {
@@ -12,13 +13,19 @@ namespace Osiris
         [SerializeField] private SelectActorPill selectActorPillPrefab = default;
         [SerializeField] private RectTransform actorPillHolder = default;
         [SerializeField] private Toggle allyToggle = default;
+        [SerializeField] private Slider timeScaleSlider = default;
+        [SerializeField] private TextMeshProUGUI timeLabel = default;
+        [SerializeField] private Button clearActorsButton = default;
+        [SerializeField] private Button startBattleButton = default;
+        [SerializeField] private Button restartBattleButton = default;
 
         private List<SelectActorPill> actorPillInstances = new List<SelectActorPill>();
 
         public ActorId selectedActorId { get; private set; }
         public bool ally { get; private set; } = true;
+        public float timeScale { get; private set; } = 1f;
 
-        public void Initialize() {
+        public void Initialize(Action clearActorsAction, Action startBattleAction, Action restartBattleAction) {
             // Instantiate actor pills
             for(int i = 0; i < definitions.Length; i++) {
                 ActorDefinition actorDef = definitions[i];
@@ -35,10 +42,19 @@ namespace Osiris
             allyToggle.onValueChanged.AddListener(OnAllyToggleValueChanged);
 
             // Clear actors button
+            clearActorsButton.onClick.RemoveAllListeners();
+            clearActorsButton.onClick.AddListener(delegate { clearActorsAction?.Invoke(); });
 
             // Start battle button
+            startBattleButton.onClick.RemoveAllListeners();
+            startBattleButton.onClick.AddListener(delegate { startBattleAction?.Invoke(); });
+
+            // Restart battle button
+            restartBattleButton.onClick.RemoveAllListeners();
+            restartBattleButton.onClick.AddListener(delegate { restartBattleAction?.Invoke(); });
 
             // Time control slider
+            timeScaleSlider.onValueChanged.AddListener(OnTimeScaleSliderValueChanged);
         }
 
         private void OnActorPillClicked(SelectActorPill clickedPill) {
@@ -53,6 +69,11 @@ namespace Osiris
 
         private void OnAllyToggleValueChanged(bool value) {
             ally = value;
+        }
+
+        private void OnTimeScaleSliderValueChanged(float value) {
+            timeScale = value;
+            timeLabel.text = "Time x" + value;
         }
     }
 }

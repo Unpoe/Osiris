@@ -19,6 +19,11 @@ namespace Osiris.Persistance
             return reader.ReadInt32();
         }
 
+        public bool ReadBool() {
+            int value = reader.ReadInt32();
+            return value == 0;
+        }
+
         public Quaternion ReadQuaternion() {
             Quaternion value;
 
@@ -38,6 +43,13 @@ namespace Osiris.Persistance
             value.z = reader.ReadSingle();
 
             return value;
+        }
+
+        public HexCoordinates ReadHexCoordinates() {
+            int x = reader.ReadInt32();
+            int z = reader.ReadInt32();
+
+            return new HexCoordinates(x, z);
         }
     }
 }

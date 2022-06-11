@@ -17,6 +17,8 @@ namespace Osiris
         public void Initialize(ActorDefinition actorDef, Action<SelectActorPill> onPillClicked) {
             actorDefinition = actorDef;
             this.onPillClicked = onPillClicked;
+
+            button.onClick.RemoveAllListeners();
             button.onClick.AddListener(delegate { this.onPillClicked?.Invoke(this); });
 
             portraitImage.sprite = actorDef.Portrait;

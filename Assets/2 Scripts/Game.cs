@@ -1,22 +1,23 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Osiris.Persistance;
 
 namespace Osiris
 {
-    public class Game : MonoBehaviour
+    public class Game : MonoBehaviour, IPersistableObject
     {
-        [SerializeField, Range(1, 10)] private float timeScale = 1f;
-        [Space]
         [SerializeField] private HexGrid grid = default;
         [SerializeField] private ActorFactory actorFactory = default;
         [SerializeField] private BattleEditorUI battleEditorUI = default;
         [SerializeField] private Camera mainCamera = default;
         [SerializeField] private LayerMask groundLayer = default;
-        [Space]
+        [Header("Battle configuration")]
         public int mapWidth = 6;
         public int mapHeight = 6;
         [Space]
         public int initialGold = 5;
+
+        private PersistentStorage storage;
 
         private Gold gold = null;
 
@@ -30,15 +31,17 @@ namespace Osiris
         private static readonly List<Actor> EMPTY_ACTOR_LIST = new List<Actor>();
 
         private void Awake() {
+            storage = new PersistentStorage();
+
             CustomRandom.SetSeed(0);
 
             gold = new Gold(initialGold);
             grid.Initialize(mapWidth, mapHeight);
             actorFactory.Initialize();
 
-            battleEditorUI.Initialize();
+            battleEditorUI.Initialize(ClearGame, StartGame, RestartGame);
 
-            NewGame();
+            storage.Load(this);
         }
 
         private void Update() {
@@ -51,27 +54,15 @@ namespace Osiris
                     HexCell startingCell = grid.GetCell(coordinates);
                     if(startingCell != null) {
                         AddActor(startingCell, battleEditorUI.ally, battleEditorUI.selectedActorId);
+                        storage.Save(this);
                     }
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha1)) {
-                gameRunning = true;
-                return;
-            } else if (Input.GetKeyDown(KeyCode.Alpha2)) {
-                ClearGame();
-                NewGame();
-                return;
-            }
-
-            float dt = Time.deltaTime * timeScale;
+            float dt = Time.deltaTime * battleEditorUI.timeScale;
 
             UpdateActorList(dt, ref allyActors);
             UpdateActorList(dt, ref enemyActors);
-        }
-
-        private void NewGame() {
-            gameRunning = false;
         }
 
         private void ClearGame() {
@@ -90,6 +81,14 @@ namespace Osiris
             enemyActors.Clear();
 
             grid.Clear();
+        }
+
+        private void RestartGame() {
+            storage.Load(this);
+        }
+
+        private void StartGame() {
+            gameRunning = true;
         }
 
         private void AddActor(HexCell startingCell, bool isAlly, ActorId actorId) {
@@ -123,6 +122,54 @@ namespace Osiris
                     actorFactory.Reclaim(actor);
                 }
             }
+        }
+
+        public void Save(GameDataWriter writer) {
+            // Save ally actors
+            writer.Write(allyActors.Count);
+            for(int i = 0; i < allyActors.Count; i++) {
+                Actor actor = allyActors[i];
+                writer.Write(actor.ally);
+                writer.Write((int)actor.Id);
+                writer.Write(actor.Coordinates);
+            }
+
+            // Save enemy actors
+            writer.Write(enemyActors.Count);
+            for (int i = 0; i < enemyActors.Count; i++) {
+                Actor actor = enemyActors[i];
+                writer.Write(actor.ally);
+                writer.Write((int)actor.Id);
+                writer.Write(actor.Coordinates);
+            }
+        }
+
+        public void Load(GameDataReader reader) {
+            ClearGame();
+
+            // Load ally actors
+            int allyCount = reader.ReadInt();
+            for(int i = 0; i < allyCount; i++) {
+                bool ally = reader.ReadBool();
+                ActorId id = (ActorId)reader.ReadInt();
+                HexCoordinates coordinates = reader.ReadHexCoordinates();
+                HexCell startingCell = grid.GetCell(coordinates);
+
+                AddActor(startingCell, ally, id);
+            }
+
+            // Load enemy actors
+            int enemyCount = reader.ReadInt();
+            for (int i = 0; i < enemyCount; i++) {
+                bool ally = reader.ReadBool();
+                ActorId id = (ActorId)reader.ReadInt();
+                HexCoordinates coordinates = reader.ReadHexCoordinates();
+                HexCell startingCell = grid.GetCell(coordinates);
+
+                AddActor(startingCell, ally, id);
+            }
+
+            gameRunning = false;
         }
     }
 }

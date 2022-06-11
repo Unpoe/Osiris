@@ -19,6 +19,10 @@ namespace Osiris.Persistance
             writer.Write(value);
         }
 
+        public void Write(bool value) {
+            writer.Write(value ? 0 : 1);
+        }
+
         public void Write(Quaternion value) {
             writer.Write(value.x);
             writer.Write(value.y);
@@ -29,6 +33,11 @@ namespace Osiris.Persistance
         public void Write(Vector3 value) {
             writer.Write(value.x);
             writer.Write(value.y);
+            writer.Write(value.z);
+        }
+
+        public void Write(HexCoordinates value) {
+            writer.Write(value.x);
             writer.Write(value.z);
         }
     }

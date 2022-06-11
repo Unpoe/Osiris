@@ -14,7 +14,8 @@ namespace Osiris
         // This is public for debugging purposes
         public int battleId = -1;
 
-        private bool ally;
+        public bool ally { get; private set; }
+
         private float hp;
         private int range;
         private float speed;
@@ -34,6 +35,7 @@ namespace Osiris
         private List<HexCell> currentPath = new List<HexCell>();
 
         public ActorId Id => actorDefinition.Id;
+        public HexCoordinates Coordinates => currentCell.coordinates;
 
         public void GameAwake() {
             animator = new ActorAnimator();
