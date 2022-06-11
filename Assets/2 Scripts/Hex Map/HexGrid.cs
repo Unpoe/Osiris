@@ -57,8 +57,15 @@ namespace Osiris
             }
         }
 
-        public HexCell GetCell(int x, int z) {
-            return cells[x + z * width];
+        public HexCell GetCell(HexCoordinates coordinates) {
+            for (int i = 0; i < cells.Length; i++) {
+                HexCell cell = cells[i];
+                if (cell.coordinates.Equals(coordinates)) {
+                    return cell;
+                }
+            }
+
+            return null;
         }
 
         public bool FindPath(HexCell fromCell, HexCell toCell, Actor actor, ref List<HexCell> path) {

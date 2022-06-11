@@ -9,6 +9,9 @@ namespace Osiris
         [Space]
         [SerializeField] private HexGrid grid = default;
         [SerializeField] private ActorFactory actorFactory = default;
+        [SerializeField] private BattleEditorUI battleEditorUI = default;
+        [SerializeField] private Camera mainCamera = default;
+        [SerializeField] private LayerMask groundLayer = default;
         [Space]
         public int mapWidth = 6;
         public int mapHeight = 6;
@@ -33,10 +36,25 @@ namespace Osiris
             grid.Initialize(mapWidth, mapHeight);
             actorFactory.Initialize();
 
+            battleEditorUI.Initialize();
+
             NewGame();
         }
 
         private void Update() {
+            if (Input.GetMouseButtonDown(0)) {
+                Plane floorPlane = new Plane(Vector3.up, Vector3.zero);
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                
+                if(Physics.Raycast(ray, out RaycastHit hitInfo, float.MaxValue, groundLayer)) {
+                    HexCoordinates coordinates = HexCoordinates.FromPosition(hitInfo.point);
+                    HexCell startingCell = grid.GetCell(coordinates);
+                    if(startingCell != null) {
+                        AddActor(startingCell, battleEditorUI.ally, battleEditorUI.selectedActorId);
+                    }
+                }
+            }
+
             if (Input.GetKeyDown(KeyCode.Alpha1)) {
                 gameRunning = true;
                 return;
@@ -53,13 +71,6 @@ namespace Osiris
         }
 
         private void NewGame() {
-            AddActor(0, 0, true, ActorId.Waifu);
-            AddActor(2, 1, true, ActorId.Waifu);
-            AddActor(4, 0, true, ActorId.Waifu);
-            AddActor(3, 5, false, ActorId.Vampire);
-            AddActor(0, 5, false, ActorId.Vampire);
-            AddActor(6, 3, false, ActorId.Vampire);
-
             gameRunning = false;
         }
 
@@ -81,9 +92,8 @@ namespace Osiris
             grid.Clear();
         }
 
-        private void AddActor(int x, int z, bool isAlly, ActorId actorId) {
+        private void AddActor(HexCell startingCell, bool isAlly, ActorId actorId) {
             Actor newActor = actorFactory.Get(actorId);
-            HexCell startingCell = grid.GetCell(x, z);
             HexDirection startingDir = isAlly ? HexDirection.NE : HexDirection.SW;
 
             newActor.Initialize(lastBattleId, isAlly, startingCell, startingDir, GetActorList, grid.FindPath);
