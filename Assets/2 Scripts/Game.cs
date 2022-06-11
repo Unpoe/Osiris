@@ -22,6 +22,8 @@ namespace Osiris
         private List<Actor> allyActors = new List<Actor>();
         private List<Actor> enemyActors = new List<Actor>();
 
+        private int lastBattleId = 0;
+
         private static readonly List<Actor> EMPTY_ACTOR_LIST = new List<Actor>();
 
         private void Awake() {
@@ -84,7 +86,8 @@ namespace Osiris
             HexCell startingCell = grid.GetCell(x, z);
             HexDirection startingDir = isAlly ? HexDirection.NE : HexDirection.SW;
 
-            newActor.Initialize(isAlly, startingCell, startingDir, GetActorList, grid.FindPath);
+            newActor.Initialize(lastBattleId, isAlly, startingCell, startingDir, GetActorList, grid.FindPath);
+            lastBattleId++;
 
             List<Actor> actors = isAlly ? allyActors : enemyActors;
             actors.Add(newActor);

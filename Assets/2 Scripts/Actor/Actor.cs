@@ -11,6 +11,9 @@ namespace Osiris
 
         private ActorAnimator animator;
 
+        // This is public for debugging purposes
+        public int battleId = -1;
+
         private bool ally;
         private float hp;
         private int range;
@@ -41,7 +44,9 @@ namespace Osiris
             animator.Destroy();
         }
 
-        public void Initialize(bool isAlly, HexCell startingCell, HexDirection startingDir, Func<bool, List<Actor>> getActors, FindPathDelegate findPath) {
+        public void Initialize(int battleId, bool isAlly, HexCell startingCell, HexDirection startingDir, Func<bool, List<Actor>> getActors, FindPathDelegate findPath) {
+            this.battleId = battleId;
+
             ally = isAlly;
             hp = actorDefinition.Hp;
             range = actorDefinition.Range;
@@ -73,6 +78,10 @@ namespace Osiris
         }
 
         public virtual bool GameUpdate(float dt) {
+            //if (battleId == 3) {
+            //    Debug.LogWarning("Debugging Actor...");
+            //}
+
             animator.GameUpdate(dt);
 
             // Check for death
@@ -84,8 +93,7 @@ namespace Osiris
             if(target == null) {
                 List<Actor> potentialTargets = getActors(!ally);
                 if(potentialTargets.Count > 0) {
-                    Actor newTarget = potentialTargets[CustomRandom.Range(0, potentialTargets.Count)];
-                    SetTarget(newTarget);
+                    target = potentialTargets[CustomRandom.Range(0, potentialTargets.Count)];
                 }
 
                 if (target == null) {
@@ -102,6 +110,7 @@ namespace Osiris
                 // Update movement
                 progress += speed * dt;
                 while (progress >= 1f) {
+                    progress -= 1f;
                     currentCell = nextCell;
                     if (currentCell.coordinates.DistanceTo(target.currentCell.coordinates) <= range) {
                         moving = false;
@@ -118,13 +127,12 @@ namespace Osiris
                     }
 
                     SetDirection(HexCell.GetDirection(currentCell, nextCell));
-
-                    progress -= 1f;
                 }
 
                 transform.position = Vector3.LerpUnclamped(currentCell.worldPosition, nextCell.worldPosition, progress);
             } else {
-                bool isTargetInRange = currentCell.coordinates.DistanceTo(target.currentCell.coordinates) <= range;
+                int distanceToTarget = currentCell.coordinates.DistanceTo(target.currentCell.coordinates);
+                bool isTargetInRange = distanceToTarget <= range;
                 if (isTargetInRange) {
                     // Update attack
                     if (animator.CurrentClip != ActorAnimator.Clip.Attack) {
@@ -146,10 +154,6 @@ namespace Osiris
             }
 
             return true;
-        }
-
-        private void SetTarget(Actor actor) {
-            target = actor;
         }
 
         private void SetDirection(HexDirection hexDirection) {

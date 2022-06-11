@@ -101,7 +101,7 @@ namespace Osiris
                         continue;
                     }
 
-                    // We can't go to cells with actors in it
+                    // Skip cells with other actors in it, except if that cell is our destination
                     if (neighbor.Actor != null && neighbor.Actor != actor && neighbor != toCell) {
                         continue;
                     }
