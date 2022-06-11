@@ -4,7 +4,7 @@ namespace Osiris
 {
     public static class HexMetrics
     {
-        public const float outerRadius = 0.6828815f;
+        public const float outerRadius = 0.55424f;
         public const float innerRadius = outerRadius * 0.866025404f;
 
         public static Vector3[] corners = {

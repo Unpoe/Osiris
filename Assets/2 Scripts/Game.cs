@@ -17,8 +17,12 @@ namespace Osiris
 
         private Gold gold = null;
 
+        private bool gameRunning = false;
+
         private List<Actor> allyActors = new List<Actor>();
         private List<Actor> enemyActors = new List<Actor>();
+
+        private static readonly List<Actor> EMPTY_ACTOR_LIST = new List<Actor>();
 
         private void Awake() {
             CustomRandom.SetSeed(0);
@@ -31,7 +35,10 @@ namespace Osiris
         }
 
         private void Update() {
-            if (Input.GetKeyDown(KeyCode.N)) {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                gameRunning = true;
+                return;
+            } else if (Input.GetKeyDown(KeyCode.Alpha2)) {
                 ClearGame();
                 NewGame();
                 return;
@@ -45,9 +52,13 @@ namespace Osiris
 
         private void NewGame() {
             AddActor(0, 0, true, ActorId.Waifu);
-            //AddActor(2, 1, true, ActorId.Waifu);
-            //AddActor(4, 0, true, ActorId.Waifu);
+            AddActor(2, 1, true, ActorId.Waifu);
+            AddActor(4, 0, true, ActorId.Waifu);
             AddActor(3, 5, false, ActorId.Vampire);
+            AddActor(0, 5, false, ActorId.Vampire);
+            AddActor(6, 3, false, ActorId.Vampire);
+
+            gameRunning = false;
         }
 
         private void ClearGame() {
@@ -64,6 +75,8 @@ namespace Osiris
                 actorFactory.Reclaim(actor);
             }
             enemyActors.Clear();
+
+            grid.Clear();
         }
 
         private void AddActor(int x, int z, bool isAlly, ActorId actorId) {
@@ -73,11 +86,15 @@ namespace Osiris
 
             newActor.Initialize(isAlly, startingCell, startingDir, GetActorList, grid.FindPath);
 
-            List<Actor> actors = GetActorList(isAlly);
+            List<Actor> actors = isAlly ? allyActors : enemyActors;
             actors.Add(newActor);
         }
 
         private List<Actor> GetActorList(bool isAlly) {
+            if (!gameRunning) {
+                return EMPTY_ACTOR_LIST;
+            }
+
             return isAlly ? allyActors : enemyActors;
         }
 

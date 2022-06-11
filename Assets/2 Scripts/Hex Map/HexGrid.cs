@@ -50,6 +50,13 @@ namespace Osiris
             }
         }
 
+        public void Clear() {
+            for(int i = 0; i < cells.Length; i++) {
+                HexCell cell = cells[i];
+                cell.Actor = null;
+            }
+        }
+
         public HexCell GetCell(int x, int z) {
             return cells[x + z * width];
         }
@@ -95,9 +102,9 @@ namespace Osiris
                     }
 
                     // We can't go to cells with actors in it
-                    //if (!neighbor.IsEmpty()) {
-                    //    continue;
-                    //}
+                    if (neighbor.Actor != null && neighbor.Actor != actor && neighbor != toCell) {
+                        continue;
+                    }
 
                     int distance = current.Distance + 1;
 

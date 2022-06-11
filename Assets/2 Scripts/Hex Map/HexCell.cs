@@ -14,8 +14,16 @@ namespace Osiris
 
         private HexCell[] neighbors;
 
-        [System.NonSerialized]
-        public Actor actor;
+        private Actor actor;
+        public Actor Actor {
+            get {
+                return actor;
+            }
+            set {
+                actor = value;
+                SetColor(actor != null ? Color.green : Color.white);
+            }
+        }
 
         // Pathfinding
         public int Distance { get; set; } // Distance between this cell and the origin one
@@ -43,7 +51,7 @@ namespace Osiris
 
             neighbors = new HexCell[6]; // One for each HexDirection
 
-            actor = null;
+            Actor = null;
 
             transform.localPosition = worldPosition;
             transform.localScale = Vector3.one * (HexMetrics.outerRadius * 2f);
@@ -57,13 +65,6 @@ namespace Osiris
         public void SetNeighbor(HexDirection direction, HexCell cell) {
             neighbors[(int)direction] = cell;
             cell.neighbors[(int)direction.Opposite()] = this;
-        }
-
-        /// <summary>
-        /// Returns true if there is not any actor in this cell.
-        /// </summary>
-        public bool IsEmpty() {
-            return actor == null;
         }
 
         public void SetColor(Color color) {

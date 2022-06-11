@@ -51,15 +51,19 @@ namespace Osiris
             this.getActors = getActors;
             this.findPath = findPath;
 
+            target = null;
             moving = false;
 
+            nextCell = null;
             currentCell = startingCell;
-            currentCell.actor = this;
+            currentCell.Actor = this;
             transform.position = currentCell.worldPosition;
 
             SetDirection(startingDir);
 
             progress = 0f;
+
+            currentPath.Clear();
 
             animator.PlayIdle();
         }
@@ -94,42 +98,49 @@ namespace Osiris
             }
 
             // At this point, we can assume we have a valid target
-            bool isTargetInRange = currentCell.coordinates.DistanceTo(target.currentCell.coordinates) <= range;
-            if (isTargetInRange) {
-                // Update attack
-                if (animator.CurrentClip != ActorAnimator.Clip.Attack) {
-                    animator.PlayAttack(attackSpeed);
-                }
-            } else {
+            if (moving) {
                 // Update movement
-                if (moving) {
-                    progress += speed * dt;
-                    while (progress >= 1f) {
-                        currentCell.actor = null;
-                        currentCell = nextCell;
-                        currentCell.actor = this;
-                        if (currentCell.coordinates.DistanceTo(target.currentCell.coordinates) <= range) {
-                            moving = false;
-                            return true;
-                        }
-
-                        nextCell = GetNextCell();
-                        if (nextCell == null) {
-                            moving = false;
-                            return true;
-                        }
-                        SetDirection(HexCell.GetDirection(currentCell, nextCell));
-
-                        progress -= 1f;
+                progress += speed * dt;
+                while (progress >= 1f) {
+                    currentCell = nextCell;
+                    if (currentCell.coordinates.DistanceTo(target.currentCell.coordinates) <= range) {
+                        moving = false;
+                        return true; // BUG?: why there is a return here?
                     }
 
-                    transform.position = Vector3.LerpUnclamped(currentCell.worldPosition, nextCell.worldPosition, progress);
-                } else {
                     nextCell = GetNextCell();
+                    if (nextCell == null) {
+                        moving = false;
+                        return true; // BUG?: why there is a return here?
+                    } else {
+                        currentCell.Actor = null;
+                        nextCell.Actor = this;
+                    }
+
                     SetDirection(HexCell.GetDirection(currentCell, nextCell));
+
+                    progress -= 1f;
+                }
+
+                transform.position = Vector3.LerpUnclamped(currentCell.worldPosition, nextCell.worldPosition, progress);
+            } else {
+                bool isTargetInRange = currentCell.coordinates.DistanceTo(target.currentCell.coordinates) <= range;
+                if (isTargetInRange) {
+                    // Update attack
+                    if (animator.CurrentClip != ActorAnimator.Clip.Attack) {
+                        SetDirection(HexCell.GetDirection(currentCell, target.currentCell));
+                        animator.PlayAttack(attackSpeed);
+                    }
+                } else {
+                    // Here we are not moving but we have a valid target
+                    // So we just try to get a valid cell to move towards our target
+                    nextCell = GetNextCell();
                     moving = nextCell != null;
                     if (moving) {
+                        currentCell.Actor = null;
+                        nextCell.Actor = this;
                         animator.PlayWalk(speed);
+                        SetDirection(HexCell.GetDirection(currentCell, nextCell));
                     }
                 }
             }
@@ -152,6 +163,10 @@ namespace Osiris
             }
 
             findPath.Invoke(currentCell, target.currentCell, this, ref currentPath);
+            // This is very temporary, we should not assume that current path has this Length
+            // Anyways, maybe in the future we should not calculate the hole path
+            // Taking in to account that the battle is "deterministic" (there is no input) maybe another
+            // approach for pathfinding could be had
             return currentPath[1];
         }
     }
