@@ -53,7 +53,7 @@ namespace Osiris
         public void Clear() {
             for(int i = 0; i < cells.Length; i++) {
                 HexCell cell = cells[i];
-                cell.Actor = null;
+                cell.Clear();
             }
         }
 

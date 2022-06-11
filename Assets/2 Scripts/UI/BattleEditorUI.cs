@@ -34,6 +34,11 @@ namespace Osiris
                 pill.SetSelected(false);
                 actorPillInstances.Add(pill);
             }
+            // Instantiate an extra pill for the erase button
+            SelectActorPill erasePill = Instantiate(selectActorPillPrefab, actorPillHolder);
+            erasePill.Initialize(null, OnActorPillClicked);
+            erasePill.SetSelected(false);
+            actorPillInstances.Add(erasePill);
 
             // Select the first pill by default
             OnActorPillClicked(actorPillInstances[0]);
@@ -64,7 +69,7 @@ namespace Osiris
             }
 
             clickedPill.SetSelected(true);
-            selectedActorId = clickedPill.actorDefinition.Id;
+            selectedActorId = clickedPill.actorId;
         }
 
         private void OnAllyToggleValueChanged(bool value) {

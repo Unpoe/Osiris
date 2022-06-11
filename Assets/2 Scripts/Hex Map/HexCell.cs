@@ -58,6 +58,10 @@ namespace Osiris
             coordinatesLabel.text = coordinates.ToStringOnSeparateLines();
         }
 
+        public void Clear() {
+            Actor = null;
+        }
+
         public HexCell GetNeighbor(HexDirection direction) {
             return neighbors[(int)direction];
         }

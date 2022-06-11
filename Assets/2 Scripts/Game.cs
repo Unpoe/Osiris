@@ -45,15 +45,27 @@ namespace Osiris
         }
 
         private void Update() {
-            if (Input.GetMouseButtonDown(0)) {
+            // Input to add or remove heroes from the grid (only in edit mode)
+            if (Input.GetMouseButtonDown(0) && !gameRunning) {
                 Plane floorPlane = new Plane(Vector3.up, Vector3.zero);
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                 
                 if(Physics.Raycast(ray, out RaycastHit hitInfo, float.MaxValue, groundLayer)) {
                     HexCoordinates coordinates = HexCoordinates.FromPosition(hitInfo.point);
-                    HexCell startingCell = grid.GetCell(coordinates);
-                    if(startingCell != null) {
-                        AddActor(startingCell, battleEditorUI.ally, battleEditorUI.selectedActorId);
+                    HexCell selectedCell = grid.GetCell(coordinates);
+                    if(selectedCell != null) {
+                        // ActorId.None is used for the erase actor button
+                        if(battleEditorUI.selectedActorId == ActorId.None) {
+                            Actor selectedActor = selectedCell.Actor;
+                            if(selectedActor != null) {
+                                List<Actor> actors = selectedActor.ally ? allyActors : enemyActors;
+                                actors.Remove(selectedActor);
+                                actorFactory.Reclaim(selectedActor);
+                                selectedCell.Clear();
+                            }
+                        } else {
+                            AddActor(selectedCell, battleEditorUI.ally, battleEditorUI.selectedActorId);
+                        }
                         storage.Save(this);
                     }
                 }

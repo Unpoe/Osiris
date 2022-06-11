@@ -2,7 +2,8 @@
 {
     public enum ActorId
     {
-        Waifu,
-        Vampire
+        None = -1,
+        Waifu = 0,
+        Vampire = 1
     }
 }

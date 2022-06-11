@@ -130,6 +130,7 @@ MonoBehaviour:
   button: {fileID: 2049734881794748113}
   portraitImage: {fileID: 2049734880549071335}
   overlayImage: {fileID: 488842326113192270}
+  eraseSprite: {fileID: 21300000, guid: e02b05cf9b329b540bea5f0de8dd64e6, type: 3}
 --- !u!222 &2049734881794748119
 CanvasRenderer:
   m_ObjectHideFlags: 0
