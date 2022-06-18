@@ -5,12 +5,12 @@ namespace Osiris
 {
     public class ActorFactory : MonoBehaviour
     {
-        [SerializeField] private Actor[] prefabs = default;
+        [SerializeField] private ActorTable actorTable = default;
 
         private List<Actor>[] actorInstances = null;
 
         public void Initialize() {
-            actorInstances = new List<Actor>[prefabs.Length];
+            actorInstances = new List<Actor>[actorTable.GetDefinitions().Count];
         }
 
         public Actor Get(ActorId actorId) {
@@ -29,7 +29,9 @@ namespace Osiris
 
                 instance.gameObject.SetActive(true);
             } else {
-                instance = Instantiate(prefabs[id], transform);
+                ActorDefinition actorDef = actorTable.GetDefinition(actorId);
+
+                instance = Instantiate(actorDef.Prefab, transform);
                 instance.GameAwake();
             }
 

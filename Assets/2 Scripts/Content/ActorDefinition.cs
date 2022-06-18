@@ -6,6 +6,8 @@ namespace Osiris
     public class ActorDefinition : ScriptableObject
     {
         [SerializeField] private ActorId id = default;
+        [Space]
+        [SerializeField] private Actor prefab = default;
         [Header("Combat")]
         [SerializeField] private float hp = 1000f;
         [SerializeField, Min(1)] private int range = 1;
@@ -17,6 +19,7 @@ namespace Osiris
         [SerializeField] private Sprite protrait = default;
 
         public ActorId Id => id;
+        public Actor Prefab => prefab;
         public float Hp => hp;
         public int Range => range;
         public float Speed => speed;

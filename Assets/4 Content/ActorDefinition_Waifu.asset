@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ActorDefinition_Waifu
   m_EditorClassIdentifier: 
   id: 0
+  prefab: {fileID: 6061764549035699030, guid: 8cef0182c4c8039428f2cc8bbcd5c7b0, type: 3}
   hp: 100
   range: 1
   speed: 2

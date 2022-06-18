@@ -72,6 +72,7 @@ namespace Osiris
             if (!hasBeenInitializedBefore) {
                 // BUG: if the Enemy is recycled and it grabs an old animator, maybe there is parameters such as
                 // the progression of the animation that are not 0. Could lead to some visual bugs
+                // Probably, configure should reset all the parameters or something like that. I should learn how playables work exactly
                 hasBeenInitializedBefore = true;
                 animator = new ActorAnimator();
                 animator.Configure(unityAnimator, actorDefinition.AnimationConfig);
