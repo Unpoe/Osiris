@@ -22,9 +22,7 @@ namespace Osiris
         private float rotationSpeed; // This variable is purely visual
         private float attackSpeed; // attacks per second
 
-        private Func<bool, List<Actor>> getActors;
-        public delegate bool FindPathDelegate(HexCell fromCell , HexCell toCell, Actor actor, ref List<HexCell> path);
-        private FindPathDelegate findPath;
+        private Battle battle;
 
         private Actor target;
 
@@ -58,7 +56,7 @@ namespace Osiris
             animator.Destroy();
         }
 
-        public void Initialize(int battleId, bool isAlly, HexCell startingCell, HexDirection startingDir, Func<bool, List<Actor>> getActors, FindPathDelegate findPath) {
+        public void Initialize(int battleId, bool isAlly, HexCell startingCell, HexDirection startingDir, Battle battle) {
             this.battleId = battleId;
 
             ally = isAlly;
@@ -68,8 +66,7 @@ namespace Osiris
             rotationSpeed = 7f;
             attackSpeed = actorDefinition.AttackSpeed;
 
-            this.getActors = getActors;
-            this.findPath = findPath;
+            this.battle = battle;
 
             target = null;
             moving = false;
@@ -125,7 +122,7 @@ namespace Osiris
 
             // Update targeting
             if(target == null) {
-                List<Actor> potentialTargets = getActors(!ally);
+                List<Actor> potentialTargets = battle.GetActorList(!ally);
                 if(potentialTargets.Count > 0) {
                     target = GetBestTarget(potentialTargets);
                 }
@@ -241,7 +238,7 @@ namespace Osiris
                 return null;
             }
 
-            if(!findPath.Invoke(currentCell, target.currentCell, this, ref currentPath)) {
+            if(!battle.grid.FindPath(currentCell, target.currentCell, this, ref currentPath)) {
                 // If the path to our target is null, we also delete our target
                 // so later GetBestTarget function will handle a new target that is accesible
                 target = null;
@@ -259,7 +256,7 @@ namespace Osiris
             for(int i = 0; i < enemies.Count; i++) {
                 Actor enemy = enemies[i];
                 // We only allow targets that are reachable
-                if(findPath.Invoke(currentCell, enemy.currentCell, this, ref PATH_TO_TARGET_BUFFER)) {
+                if(battle.grid.FindPath(currentCell, enemy.currentCell, this, ref PATH_TO_TARGET_BUFFER)) {
                     // The potential targets are the ones that are closer
                     int distance = currentCell.coordinates.DistanceTo(enemy.currentCell.coordinates);
                     if (distance < nearDistance) {
