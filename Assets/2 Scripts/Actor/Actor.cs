@@ -19,6 +19,7 @@ namespace Osiris
         private float hp;
         private int range;
         private float speed;
+        private float rotationSpeed; // This variable is purely visual
         private float attackSpeed; // attacks per second
 
         private Func<bool, List<Actor>> getActors;
@@ -28,13 +29,17 @@ namespace Osiris
         private Actor target;
 
         private bool moving;
+        private bool rotating;
 
         private HexCell currentCell, nextCell;
-        private HexDirection currentDir, targetDir;
-        private float progress = 0f;
+        private float movementProgress, rotationProgress = 0f;
         private List<HexCell> currentPath = new List<HexCell>();
+        private HexDirection currentDir, targetDir;
+        private float angleFrom, angleTo;
 
         private int movesToReachTargetCount = 0;
+
+        private float rotationProgressSpeed = 1f;
 
         public ActorId Id => actorDefinition.Id;
         public HexCoordinates Coordinates => currentCell.coordinates;
@@ -60,6 +65,7 @@ namespace Osiris
             hp = actorDefinition.Hp;
             range = actorDefinition.Range;
             speed = actorDefinition.Speed;
+            rotationSpeed = 7f;
             attackSpeed = actorDefinition.AttackSpeed;
 
             this.getActors = getActors;
@@ -67,16 +73,19 @@ namespace Osiris
 
             target = null;
             moving = false;
+            rotating = false;
 
             nextCell = null;
             currentCell = startingCell;
             currentCell.Actor = this;
             transform.position = currentCell.worldPosition;
 
-            SetDirection(startingDir);
+            SetDirection(startingDir, true);
 
-            progress = 0f;
+            movementProgress = 0f;
             movesToReachTargetCount = 0;
+
+            rotationProgress = 0f;
 
             currentPath.Clear();
 
@@ -88,7 +97,7 @@ namespace Osiris
         }
 
         public virtual bool GameUpdate(float dt) {
-            //if (battleId == 3) {
+            //if (battleId == 4) {
             //    Debug.LogWarning("Debugging Actor...");
             //}
 
@@ -97,6 +106,21 @@ namespace Osiris
             // Check for death
             if(hp <= 0) {
                 return false;
+            }
+
+            // Update rotation
+            if (rotating) {
+                rotationProgress += rotationProgressSpeed * dt;
+                float yAngle = 0f;
+                if(rotationProgress >= 1f) {
+                    rotating = false;
+                    currentDir = targetDir;
+                    yAngle = currentDir.GetYAngle();
+                } else {
+                    yAngle = Mathf.Lerp(angleFrom, angleTo, rotationProgress);
+                }
+
+                transform.rotation = Quaternion.Euler(0f, yAngle, 0f);
             }
 
             // Update targeting
@@ -120,16 +144,19 @@ namespace Osiris
 
             if (moving) {
                 // Update movement
-                progress += speed * dt;
-                while (progress >= 1f) {
+                movementProgress += speed * dt;
+                while (movementProgress >= 1f) {
                     // When we reach here, it means we have completed one movement (from one cell to another)
-                    progress -= 1f;
+                    movementProgress -= 1f;
                     currentCell = nextCell;
 
                     // Check if we reached our target
-                    if (currentCell.coordinates.DistanceTo(target.currentCell.coordinates) <= range) {
+                    // If our target is moving, we need to check the cell that its going to
+                    HexCell targetCellToCheck = target.moving ? target.nextCell : target.currentCell;
+                    int distanceToTarget = currentCell.coordinates.DistanceTo(targetCellToCheck.coordinates);
+                    if (distanceToTarget <= range) {
                         moving = false;
-                        progress = 0f; // When we stop, we set our progress to 0
+                        movementProgress = 0f; // When we stop, we set our progress to 0
                         transform.position = currentCell.worldPosition;
                         return true;
                     } else {
@@ -143,7 +170,7 @@ namespace Osiris
                     nextCell = GetNextCell();
                     if (nextCell == null) {
                         moving = false;
-                        progress = 0f; // When we stop, we set our progress to 0
+                        movementProgress = 0f; // When we stop, we set our progress to 0
                         transform.position = currentCell.worldPosition;
                         return true;
                     } else {
@@ -152,19 +179,19 @@ namespace Osiris
                         nextCell.Actor = this;
                     }
 
-                    SetDirection(HexCell.GetDirection(currentCell, nextCell));
+                    SetDirection(HexCell.GetDirection(currentCell, nextCell), false);
                 }
 
-                transform.position = Vector3.LerpUnclamped(currentCell.worldPosition, nextCell.worldPosition, progress);
+                transform.position = Vector3.LerpUnclamped(currentCell.worldPosition, nextCell.worldPosition, movementProgress);
             } else {
                 // At this point, we can assume we have a valid target (be careful that GetNextCell can delete our target)
                 int distanceToTarget = currentCell.coordinates.DistanceTo(target.currentCell.coordinates);
                 bool isTargetInRange = distanceToTarget <= range;
                 if (isTargetInRange) {
                     // Update attack
-                    // BUG: here we do not take into account that the target can be moving around us
-                    // for now this only means that we do not rotate, which is easy to fix, but maybe there are other implications
-                    SetDirection(HexCell.GetDirection(currentCell, target.currentCell));
+                    // The target can be moving around us and it will still be in range
+                    // but SetDirection will do nothing if we are pointing at the same direction
+                    SetDirection(HexCell.GetDirection(currentCell, target.currentCell), false);
                     if (animator.CurrentClip != ActorAnimator.Clip.Attack) {
                         animator.PlayAttack(attackSpeed);
                     }
@@ -177,7 +204,7 @@ namespace Osiris
                         currentCell.Actor = null;
                         nextCell.Actor = this;
                         animator.PlayWalk(speed);
-                        SetDirection(HexCell.GetDirection(currentCell, nextCell));
+                        SetDirection(HexCell.GetDirection(currentCell, nextCell), false);
                     }
                 }
             }
@@ -185,9 +212,28 @@ namespace Osiris
             return true;
         }
 
-        private void SetDirection(HexDirection hexDirection) {
-            currentDir = hexDirection;
-            transform.rotation = Quaternion.Euler(0, currentDir.GetYAngle(), 0);
+        private void SetDirection(HexDirection hexDirection, bool snap) {
+            if (snap) {
+                currentDir = targetDir = hexDirection;
+                angleFrom = angleTo = currentDir.GetYAngle();
+                transform.rotation = Quaternion.Euler(0, angleFrom, 0);
+                return;
+            }
+
+            // If we are or we are going to the desired direction, skip this function
+            if(currentDir == hexDirection || targetDir == hexDirection) {
+                return;
+            }
+
+            targetDir = hexDirection;
+            int steps = currentDir.GetRotationStepsTo(targetDir);
+            angleFrom = angleTo;
+            // Angle to is calculated this way instead of using targetDir.GetAngleY() to handle the
+            // lerp better. Instead of lerping between 30 and 270 we want to lerp between 30 and -30
+            angleTo = angleFrom + (HexMetrics.innerAngle * steps);
+            rotating = true;
+            rotationProgress = 0f;
+            rotationProgressSpeed = rotationSpeed * Mathf.Abs(steps);
         }
 
         private HexCell GetNextCell() {
@@ -207,6 +253,7 @@ namespace Osiris
 
         private Actor GetBestTarget(List<Actor> enemies) {
             POTENTIAL_TARGETS_BUFFER.Clear();
+
             int nearDistance = int.MaxValue;
 
             for(int i = 0; i < enemies.Count; i++) {
@@ -215,13 +262,13 @@ namespace Osiris
                 if(findPath.Invoke(currentCell, enemy.currentCell, this, ref PATH_TO_TARGET_BUFFER)) {
                     // The potential targets are the ones that are closer
                     int distance = currentCell.coordinates.DistanceTo(enemy.currentCell.coordinates);
-                    if (PATH_TO_TARGET_BUFFER.Count < nearDistance) {
+                    if (distance < nearDistance) {
                         // If we found a new nearDistance, we clean the previous targets because they are too far
                         POTENTIAL_TARGETS_BUFFER.Clear();
                         POTENTIAL_TARGETS_BUFFER.Add(enemy);
 
                         nearDistance = PATH_TO_TARGET_BUFFER.Count;
-                    } else if (PATH_TO_TARGET_BUFFER.Count == nearDistance) {
+                    } else if (distance == nearDistance) {
                         POTENTIAL_TARGETS_BUFFER.Add(enemy);
                     }
                 }

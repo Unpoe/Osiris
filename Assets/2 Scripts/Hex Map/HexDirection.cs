@@ -26,5 +26,22 @@
         public static float GetYAngle(this HexDirection direction) {
             return anglesPerDirection[(int)direction];
         }
+
+        public static int GetRotationStepsTo(this HexDirection direction, HexDirection other) {
+            // This function makes my eyes cry. Is there any way I can do this better?
+            if(direction == other) {
+                return 0;
+            } else if (direction.Opposite() == other) {
+                return 3;
+            } else if (direction.Next() == other) {
+                return 1;
+            } else if (other.Next() == direction) {
+                return -1;
+            } else if(direction.Next().Next() == other) {
+                return 2;
+            } else {
+                return -2;
+            }
+        }
     }
 }

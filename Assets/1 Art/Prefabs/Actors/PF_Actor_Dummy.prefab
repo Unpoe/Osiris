@@ -44,8 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94bae0c7cb3e40a4a8ccabc5d267e75b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationConfig: {fileID: 11400000, guid: 50c5ff7b4f72986459461273e9151c56, type: 2}
+  actorDefinition: {fileID: 11400000, guid: 8bb4780a78dbf834fb9a5c6376aa306b, type: 2}
   unityAnimator: {fileID: 113228815997614710}
+  battleId: -1
 --- !u!1 &5905788210149668220
 GameObject:
   m_ObjectHideFlags: 0
