@@ -8,6 +8,7 @@ namespace Osiris
 
         private ActorFactory actorFactory;
         public HexGrid grid; // This is public so actor can access it
+        private Catalog catalog;
 
         private Gold gold;
 
@@ -20,9 +21,10 @@ namespace Osiris
 
         private static readonly List<Actor> EMPTY_ACTOR_LIST = new List<Actor>();
 
-        public Battle(ActorFactory actorFactory, HexGrid grid, int initialGold) {
+        public Battle(ActorFactory actorFactory, HexGrid grid, Catalog catalog, int initialGold) {
             this.actorFactory = actorFactory;
             this.grid = grid;
+            this.catalog = catalog;
 
             gold = new Gold(initialGold);
 
@@ -66,8 +68,9 @@ namespace Osiris
         public void AddActor(HexCell startingCell, bool isAlly, ActorId actorId) {
             Actor newActor = actorFactory.Get(actorId);
             HexDirection startingDir = isAlly ? HexDirection.NE : HexDirection.SW;
+            ActorDefinition actorDef = catalog.ActorTable.GetDefinition(actorId);
 
-            newActor.Initialize(lastBattleId, isAlly, startingCell, startingDir, this);
+            newActor.Initialize(lastBattleId, actorDef, isAlly, startingCell, startingDir, this);
             lastBattleId++;
 
             List<Actor> actors = isAlly ? allyActors : enemyActors;

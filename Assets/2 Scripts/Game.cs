@@ -8,6 +8,7 @@ namespace Osiris
     {
         [SerializeField] private HexGrid grid = default;
         [SerializeField] private ActorFactory actorFactory = default;
+        [SerializeField] private Catalog catalog = default;
         [SerializeField] private BattleEditorUI battleEditorUI = default;
         [SerializeField] private Camera mainCamera = default;
         [SerializeField] private LayerMask groundLayer = default;
@@ -31,7 +32,7 @@ namespace Osiris
             grid.Initialize(mapWidth, mapHeight);
 
             // Initialize battle
-            battle = new Battle(actorFactory, grid, initialGold);
+            battle = new Battle(actorFactory, grid, catalog, initialGold);
             battleEditorUI.Initialize(battle.Clear, battle.Start, delegate { storage.Load(this); });
 
             storage.Load(this);

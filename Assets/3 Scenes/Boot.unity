@@ -166,6 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 926810896}
   actorFactory: {fileID: 567485395}
+  catalog: {fileID: 11400000, guid: 50dbb5f5e67fa224a823a0142cb649c4, type: 2}
   battleEditorUI: {fileID: 1621863536}
   mainCamera: {fileID: 1214270900}
   groundLayer:

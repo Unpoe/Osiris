@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Osiris
 {
     public class Actor : MonoBehaviour
     {
-        [SerializeField] private ActorDefinition actorDefinition = default;
         [SerializeField] private Animator unityAnimator = default;
+
+        private bool hasBeenInitializedBefore;
 
         private ActorAnimator animator;
 
@@ -23,6 +23,7 @@ namespace Osiris
         private float attackSpeed; // attacks per second
 
         private Battle battle;
+        private ActorDefinition actorDefinition;
 
         private Actor target;
 
@@ -48,15 +49,14 @@ namespace Osiris
         private const int MAX_MOVES_TO_REACH_TARGET = 2;
 
         public void GameAwake() {
-            animator = new ActorAnimator();
-            animator.Configure(unityAnimator, actorDefinition.AnimationConfig);
+            hasBeenInitializedBefore = false;
         }
 
         private void OnDestroy() {
             animator.Destroy();
         }
 
-        public void Initialize(int battleId, bool isAlly, HexCell startingCell, HexDirection startingDir, Battle battle) {
+        public void Initialize(int battleId, ActorDefinition actorDefinition, bool isAlly, HexCell startingCell, HexDirection startingDir, Battle battle) {
             this.battleId = battleId;
 
             ally = isAlly;
@@ -67,6 +67,15 @@ namespace Osiris
             attackSpeed = actorDefinition.AttackSpeed;
 
             this.battle = battle;
+            this.actorDefinition = actorDefinition;
+
+            if (!hasBeenInitializedBefore) {
+                // BUG: if the Enemy is recycled and it grabs an old animator, maybe there is parameters such as
+                // the progression of the animation that are not 0. Could lead to some visual bugs
+                hasBeenInitializedBefore = true;
+                animator = new ActorAnimator();
+                animator.Configure(unityAnimator, actorDefinition.AnimationConfig);
+            }
 
             target = null;
             moving = false;
