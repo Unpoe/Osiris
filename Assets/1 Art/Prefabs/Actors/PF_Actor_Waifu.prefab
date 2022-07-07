@@ -44,8 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dc1312161fb16944a8d2060561d8e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actorDefinition: {fileID: 11400000, guid: 1bb8d575b874f3446b4e28bf7a29790d, type: 2}
   unityAnimator: {fileID: 44761940938524752}
+  dummy: 1
+  battleId: -1
+  attackProgress: 0
 --- !u!1 &5905788210149668220
 GameObject:
   m_ObjectHideFlags: 0

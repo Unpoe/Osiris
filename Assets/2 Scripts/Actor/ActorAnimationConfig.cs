@@ -8,9 +8,12 @@ namespace Osiris
         [SerializeField] private AnimationClip idle = default;
         [SerializeField] private AnimationClip walk = default;
         [SerializeField] private AnimationClip attack = default;
+        [Space]
+        [SerializeField] private float attackEventNormalizedTime = 1f;
 
         public AnimationClip Idle => idle;
         public AnimationClip Walk => walk;
         public AnimationClip Attack => attack;
+        public float AttackEventNormalizedTime => attackEventNormalizedTime;
     }
 }

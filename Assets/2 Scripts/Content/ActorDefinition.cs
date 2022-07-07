@@ -13,6 +13,7 @@ namespace Osiris
         [SerializeField, Min(1)] private int range = 1;
         [SerializeField] private float speed = 1f;
         [SerializeField] private float attackSpeed = 1f; // attacks per second
+        [SerializeField] private float attackDamage = 10f;
         [Header("Animation")]
         [SerializeField] private ActorAnimationConfig animationConfig = default;
         [Header("UI")]
@@ -24,6 +25,7 @@ namespace Osiris
         public int Range => range;
         public float Speed => speed;
         public float AttackSpeed => attackSpeed;
+        public float AttackDamage => attackDamage;
         public ActorAnimationConfig AnimationConfig => animationConfig;
         public Sprite Portrait => protrait;
     }

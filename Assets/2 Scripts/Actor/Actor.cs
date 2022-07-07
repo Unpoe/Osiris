@@ -7,6 +7,9 @@ namespace Osiris
     {
         [SerializeField] private Animator unityAnimator = default;
 
+        [Header("Debug")]
+        [SerializeField] private bool dummy = false;
+
         private bool hasBeenInitializedBefore;
 
         private ActorAnimator animator;
@@ -21,6 +24,7 @@ namespace Osiris
         private float speed;
         private float rotationSpeed; // This variable is purely visual
         private float attackSpeed; // attacks per second
+        private float attackDamage;
 
         private Battle battle;
         private ActorDefinition actorDefinition;
@@ -39,6 +43,9 @@ namespace Osiris
         private int movesToReachTargetCount = 0;
 
         private float rotationProgressSpeed = 1f;
+
+        // Attack variables
+        public float attackProgress = 0f;
 
         public ActorId Id => actorDefinition.Id;
         public HexCoordinates Coordinates => currentCell.coordinates;
@@ -65,6 +72,7 @@ namespace Osiris
             speed = actorDefinition.Speed;
             rotationSpeed = 7f;
             attackSpeed = actorDefinition.AttackSpeed;
+            attackDamage = actorDefinition.AttackDamage;
 
             this.battle = battle;
             this.actorDefinition = actorDefinition;
@@ -94,9 +102,11 @@ namespace Osiris
 
             rotationProgress = 0f;
 
+            attackProgress = 0f;
+
             currentPath.Clear();
 
-            animator.PlayIdle();
+            animator.PlayIdle(false);
         }
 
         public void Clear() {
@@ -115,6 +125,10 @@ namespace Osiris
                 return false;
             }
 
+            if (dummy) {
+                return true;
+            }
+
             // Update rotation
             if (rotating) {
                 rotationProgress += rotationProgressSpeed * dt;
@@ -131,7 +145,14 @@ namespace Osiris
             }
 
             // Update targeting
-            if(target == null) {
+            if (target != null && !target.gameObject.activeInHierarchy) {
+                // We check activeInHierarchy because an enemy dying does not destroy
+                // the object. We could check if the hp is bellow 0, but maybe between
+                // updates some character heals it and the character will still be alive
+                target = null;
+            }
+
+            if (target == null) {
                 List<Actor> potentialTargets = battle.GetActorList(!ally);
                 if(potentialTargets.Count > 0) {
                     target = GetBestTarget(potentialTargets);
@@ -140,7 +161,7 @@ namespace Osiris
                 if (target == null) {
                     // We do not have a target, just idle
                     if (animator.CurrentClip != ActorAnimator.Clip.Idle) {
-                        animator.PlayIdle();
+                        animator.PlayIdle(true);
                     }
                     return true;
                 } else {
@@ -165,6 +186,9 @@ namespace Osiris
                         moving = false;
                         movementProgress = 0f; // When we stop, we set our progress to 0
                         transform.position = currentCell.worldPosition;
+                        // If we get in range of our target, lets go to attack
+                        // TODO: does this mean that when moving is false we are attacking?
+                        PrepareAttack();
                         return true;
                     } else {
                         // If we haven't reached our target yet, we need to check if it is better to just change our target
@@ -199,12 +223,17 @@ namespace Osiris
                     // The target can be moving around us and it will still be in range
                     // but SetDirection will do nothing if we are pointing at the same direction
                     SetDirection(HexCell.GetDirection(currentCell, target.currentCell), false);
-                    if (animator.CurrentClip != ActorAnimator.Clip.Attack) {
-                        animator.PlayAttack(attackSpeed);
+                    attackProgress += dt * attackSpeed;
+                    while(attackProgress >= 1) {
+                        attackProgress -= 1f;
+
+                        // Perform attack
+                        target.ApplyDamage(attackDamage);
                     }
                 } else {
                     // Here we are not moving but we have a valid target
                     // So we just try to get a valid cell to move towards our target
+                    // TODO: how do we handle if the next cell is the one that our target is on?
                     nextCell = GetNextCell();
                     moving = nextCell != null;
                     if (moving) {
@@ -286,6 +315,15 @@ namespace Osiris
             }
 
             return POTENTIAL_TARGETS_BUFFER[CustomRandom.Range(0, POTENTIAL_TARGETS_BUFFER.Count)];
+        }
+
+        private void PrepareAttack() {
+            attackProgress = 0f;
+            animator.PlayAttack(attackSpeed);
+        }
+
+        public void ApplyDamage(float amount) {
+            hp -= amount;
         }
     }
 }

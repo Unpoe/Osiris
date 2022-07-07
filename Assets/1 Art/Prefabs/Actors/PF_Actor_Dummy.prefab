@@ -44,8 +44,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94bae0c7cb3e40a4a8ccabc5d267e75b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actorDefinition: {fileID: 11400000, guid: 8bb4780a78dbf834fb9a5c6376aa306b, type: 2}
+  visualsPivot: {fileID: 5905788210149668221}
   unityAnimator: {fileID: 113228815997614710}
+  attackCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0074310303
+      value: 0.0035705566
+      inSlope: -3.1111813
+      outSlope: -3.1111813
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.33
+      value: -1
+      inSlope: 0.0021812501
+      outSlope: 0.0021812501
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.66
+      value: 1
+      inSlope: 0.00018756032
+      outSlope: 0.00018756032
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 1
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -2.9411767
+      outSlope: -2.9411767
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   battleId: -1
 --- !u!1 &5905788210149668220
 GameObject:
