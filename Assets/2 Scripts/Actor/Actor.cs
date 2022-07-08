@@ -113,7 +113,7 @@ namespace Osiris
             animator.Stop();
         }
 
-        public virtual bool GameUpdate(float dt) {
+        public bool GameUpdate(float dt) {
             //if (battleId == 4) {
             //    Debug.LogWarning("Debugging Actor...");
             //}
