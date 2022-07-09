@@ -7,7 +7,12 @@ namespace Osiris
     public class ActorTable : ScriptableObject
     {
         // TODO: find a way to serialize definitions differently, because this way in inspector we don't know what are we assigning
-        [SerializeField] private List<ActorDefinition> definitions = default;
+        [EnumLabelArray(typeof(ActorId), (int)ActorId.None, (int)ActorId.Count)]
+        [SerializeField] private ActorDefinition[] definitions = default;
+
+        public void AddDefinition(ActorDefinition actorDefinition) {
+            definitions[(int)actorDefinition.Id] = actorDefinition;
+        }
 
         public IReadOnlyList<ActorDefinition> GetDefinitions() {
             return definitions;
@@ -15,7 +20,7 @@ namespace Osiris
 
         public ActorDefinition GetDefinition(ActorId id) {
             int index = (int)id;
-            if(index < definitions.Count && index >= 0) {
+            if(index < definitions.Length && index >= 0) {
                 return definitions[index];
             }
 

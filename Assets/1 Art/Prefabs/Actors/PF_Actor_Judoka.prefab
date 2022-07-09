@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5905788209922963920}
   - component: {fileID: 6061764549035699030}
   m_Layer: 0
-  m_Name: PF_Actor_Waifu
+  m_Name: PF_Actor_Judoka
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +47,6 @@ MonoBehaviour:
   unityAnimator: {fileID: 44761940938524752}
   dummy: 1
   battleId: -1
-  attackProgress: 0
 --- !u!1 &5905788210149668220
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +57,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5905788210149668221}
   m_Layer: 0
-  m_Name: visuals
+  m_Name: visualsPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

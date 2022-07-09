@@ -45,7 +45,7 @@ namespace Osiris
         private float rotationProgressSpeed = 1f;
 
         // Attack variables
-        public float attackProgress = 0f;
+        private float attackProgress = 0f;
 
         public ActorId Id => actorDefinition.Id;
         public HexCoordinates Coordinates => currentCell.coordinates;
@@ -54,6 +54,11 @@ namespace Osiris
         private static List<HexCell> PATH_TO_TARGET_BUFFER = new List<HexCell>();
 
         private const int MAX_MOVES_TO_REACH_TARGET = 2;
+
+        // Used only in editor
+        public void SetEditorDependencies(Animator unityAnimator) {
+            this.unityAnimator = unityAnimator;
+        }
 
         public void GameAwake() {
             hasBeenInitializedBefore = false;
