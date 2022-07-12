@@ -39,7 +39,7 @@ namespace Osiris
         private static int colorPropertyId = Shader.PropertyToID("_Color");
         private static MaterialPropertyBlock sharedPropertyBlock;
 
-        public void Initialize(int x, int z, int i) {
+        public void Initialize(int x, int z, int i, bool debugMode) {
             coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
 
             Vector3 position;
@@ -56,6 +56,7 @@ namespace Osiris
             transform.localPosition = worldPosition;
             transform.localScale = Vector3.one * (HexMetrics.outerRadius * 2f);
             coordinatesLabel.text = coordinates.ToStringOnSeparateLines();
+            coordinatesLabel.gameObject.SetActive(debugMode);
         }
 
         public void Clear() {

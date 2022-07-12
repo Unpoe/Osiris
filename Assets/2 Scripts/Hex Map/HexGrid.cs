@@ -5,6 +5,8 @@ namespace Osiris
 {
     public class HexGrid : MonoBehaviour
     {
+        [SerializeField] private bool debugMode = false;
+        [Space]
         [SerializeField] private HexCell hexPrefab = default;
 
         public int width { get; private set; }
@@ -23,7 +25,7 @@ namespace Osiris
             for (int z = 0, i = 0; z < height; z++) {
                 for (int x = 0; x < width; x++) {
                     HexCell cell = cells[i] = Instantiate(hexPrefab, transform);
-                    cell.Initialize(x, z, i);
+                    cell.Initialize(x, z, i, debugMode);
 
                     // Connecting Neighbors
                     if(x > 0) { // Connecting from east to west
