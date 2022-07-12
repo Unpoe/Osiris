@@ -6,16 +6,34 @@ namespace Osiris
     [CreateAssetMenu(fileName = "ActorTable", menuName = "Osiris/Content/ActorTable")]
     public class ActorTable : ScriptableObject
     {
-        // TODO: find a way to serialize definitions differently, because this way in inspector we don't know what are we assigning
+        [SerializeField] private ActorDefinition mockDefinition = default;
+
         [EnumLabelArray(typeof(ActorId), (int)ActorId.None, (int)ActorId.Count)]
         [SerializeField] private ActorDefinition[] definitions = default;
 
+        private List<ActorDefinition> filteredDefinitions = new List<ActorDefinition>();
+
+        // Used only in editor
         public void AddDefinition(ActorDefinition actorDefinition) {
             definitions[(int)actorDefinition.Id] = actorDefinition;
         }
 
         public IReadOnlyList<ActorDefinition> GetDefinitions() {
             return definitions;
+        }
+
+        public IReadOnlyList<ActorDefinition> GetDefinitionsWithoutMocks() {
+            filteredDefinitions.Clear();
+            for(int i = 0; i < definitions.Length; i++) {
+                ActorDefinition actorDef = definitions[i];
+                if(actorDef == mockDefinition) {
+                    continue;
+                }
+
+                filteredDefinitions.Add(actorDef);
+            }
+
+            return filteredDefinitions;
         }
 
         public ActorDefinition GetDefinition(ActorId id) {

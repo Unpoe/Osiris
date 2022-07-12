@@ -23,7 +23,7 @@ namespace Osiris
 
         public void Initialize(Action clearActorsAction, Action startBattleAction, Action restartBattleAction) {
             // Instantiate actor pills
-            IReadOnlyList<ActorDefinition> definitions = actorTable.GetDefinitions();
+            IReadOnlyList<ActorDefinition> definitions = actorTable.GetDefinitionsWithoutMocks();
             for(int i = 0; i < definitions.Count; i++) {
                 ActorDefinition actorDef = definitions[i];
                 SelectActorPill pill = Instantiate(selectActorPillPrefab, actorPillHolder);
