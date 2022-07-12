@@ -28,5 +28,12 @@ namespace Osiris
         public float AttackDamage => attackDamage;
         public ActorAnimationConfig AnimationConfig => animationConfig;
         public Sprite Portrait => protrait;
+
+        // Used only in editor
+        public void SetEditorDependencies(ActorId id, Actor prefab, ActorAnimationConfig animationConfig) {
+            this.id = id;
+            this.prefab = prefab;
+            this.animationConfig = animationConfig;
+        }
     }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fab76926ac0c89749af5155b63dc0120, type: 3}
   m_Name: ActorDefinition_Judoka
   m_EditorClassIdentifier: 
-  id: 0
+  id: 3
   prefab: {fileID: 6061764549035699030, guid: 8cef0182c4c8039428f2cc8bbcd5c7b0, type: 3}
   hp: 30
   range: 1

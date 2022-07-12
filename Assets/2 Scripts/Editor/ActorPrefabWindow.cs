@@ -52,20 +52,25 @@ namespace Osiris
 
             // Character model
             GameObject model = Instantiate(characterModel, visualsPivot.transform);
-            Animator animator = model.GetComponent<Animator>();
-            if(animator == null) {
-                Debug.LogError("[ActorPrefabWindow] Character model does not have an animator. No asset has been created.");
-                return;
-            }
-            animator.applyRootMotion = false;
+            //Animator animator = model.GetComponent<Animator>();
+            //if(animator == null) {
+            //    Debug.LogError("[ActorPrefabWindow] Character model does not have an animator. No asset has been created.");
+            //    return;
+            //}
+            //animator.applyRootMotion = false;
 
             // Actor component
             Actor actorComponent = rootObject.AddComponent<Actor>();
-            actorComponent.SetEditorDependencies(animator);
+            //actorComponent.SetEditorDependencies(animator);
 
             bool success;
             string prefabName = $"/PF_Actor_{actorId.ToString()}.prefab";
             string prefabPath = Path.Combine(Application.dataPath, prefabSavePath, prefabName);
+
+            if(!AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject))) {
+                Debug.LogError("prefab exists already. not doing anythign");
+            }
+
             GameObject prefab = PrefabUtility.SaveAsPrefabAsset(rootObject, prefabPath, out success);
 
             if (success) {
@@ -95,6 +100,19 @@ namespace Osiris
                 string animConfigPath = Path.Combine(contentSavePath, animConfigName);
                 AssetDatabase.CreateAsset(animConfig, animConfigPath);
                 AssetDatabase.SaveAssets();
+
+                // Set definition dependencies
+                actorDef.SetEditorDependencies(actorId, actorComponent, animConfig);
+
+                // Set definition to the table
+                string[] assetGUIDs = AssetDatabase.FindAssets("t:ActorTable");
+                if (assetGUIDs.Length > 0) {
+                    string actorTablePath = AssetDatabase.GUIDToAssetPath(assetGUIDs[0]);
+                    ActorTable actorTable = AssetDatabase.LoadAssetAtPath<ActorTable>(actorTablePath);
+                    actorTable.AddDefinition(actorDef);
+                } else {
+                    Debug.LogError("[ActorPrefabWindow] No ActorTable asset has been found. The new definition will not be added to the table.");
+                }
             }
         }
     }

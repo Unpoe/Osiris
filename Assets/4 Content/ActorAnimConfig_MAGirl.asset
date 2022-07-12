@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b200eb1fd392bc7439fd05916a19cbec, type: 3}
+  m_Name: ActorAnimConfig_MAGirl
+  m_EditorClassIdentifier: 
+  idle: {fileID: -203655887218126122, guid: a5c27dd7c04a20343bd25f8e11060b5f, type: 3}
+  walk: {fileID: -203655887218126122, guid: cb4bb6bb35e65374db49f1bb6ecd262b, type: 3}
+  attack: {fileID: -203655887218126122, guid: 88d20f5ea1fb24d4ab8847ad62ec6454, type: 3}
+  attackEventNormalizedTime: 1

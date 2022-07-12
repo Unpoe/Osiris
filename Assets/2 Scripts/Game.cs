@@ -61,7 +61,7 @@ namespace Osiris
                 }
             }
 
-            float dt = Time.deltaTime * battleEditorUI.timeScale;
+            float dt = Time.deltaTime;
 
             battle.GameUpdate(dt);
         }

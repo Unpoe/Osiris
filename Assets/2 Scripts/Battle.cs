@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Osiris
 {
     public class Battle
     {
+        // Only used for debugging
+        private float timeScale;
+
         public bool running { get; private set; }
 
         private ActorFactory actorFactory;
@@ -25,6 +29,8 @@ namespace Osiris
             this.actorFactory = actorFactory;
             this.grid = grid;
             this.catalog = catalog;
+
+            timeScale = 1f;
 
             gold = new Gold(initialGold);
 
@@ -61,6 +67,22 @@ namespace Osiris
         }
 
         public void GameUpdate(float dt) {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (Input.GetKeyDown(KeyCode.F1)) {
+                timeScale = 1f;
+            } else if (Input.GetKeyDown(KeyCode.F2)) {
+                timeScale = 2f;
+            } else if(Input.GetKeyDown(KeyCode.F3)) {
+                timeScale = 4f;
+            } else if (Input.GetKeyDown(KeyCode.F4)) {
+                timeScale = 0.5f;
+            } else if (Input.GetKeyDown(KeyCode.F5)) {
+                timeScale = 0.25f;
+            }
+
+            dt *= timeScale;
+#endif
+
             UpdateActorList(dt, ref allyActors);
             UpdateActorList(dt, ref enemyActors);
         }
