@@ -119,9 +119,9 @@ namespace Osiris
         }
 
         public bool GameUpdate(float dt) {
-            //if (battleId == 4) {
-            //    Debug.LogWarning("Debugging Actor...");
-            //}
+            if (battleId == 4) {
+                Debug.LogWarning("Debugging Actor...");
+            }
 
             animator.GameUpdate(dt);
 

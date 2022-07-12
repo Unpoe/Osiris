@@ -117,6 +117,10 @@ namespace Osiris
         }
 
         private void BeginTransition(Clip nextClip) {
+            if(nextClip == CurrentClip) {
+                return;
+            }
+
             previousClip = CurrentClip;
             CurrentClip = nextClip;
             transitionProgress = 0f;
