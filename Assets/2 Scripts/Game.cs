@@ -35,6 +35,7 @@ namespace Osiris
             battle = new Battle(actorFactory, grid, catalog, initialGold);
             battleEditorUI.Initialize(battle.Clear, battle.Start, delegate { storage.Load(this); });
 
+            // Load the game
             storage.Load(this);
         }
 
