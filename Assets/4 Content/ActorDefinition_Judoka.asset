@@ -16,7 +16,7 @@ MonoBehaviour:
   prefab: {fileID: 6061764549035699030, guid: 8cef0182c4c8039428f2cc8bbcd5c7b0, type: 3}
   hp: 30
   range: 1
-  speed: 2
+  speed: 1
   attackSpeed: 1.3
   attackDamage: 10
   animationConfig: {fileID: 11400000, guid: 682210ca4fbd4de4ba6d91f6eb112503, type: 2}
