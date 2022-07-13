@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fab76926ac0c89749af5155b63dc0120, type: 3}
-  m_Name: ActorDefinition_Judoka
+  m_Name: ActorDefinition_SportsClubDps1
   m_EditorClassIdentifier: 
-  id: 3
-  prefab: {fileID: 6061764549035699030, guid: 8cef0182c4c8039428f2cc8bbcd5c7b0, type: 3}
+  id: 2
+  prefab: {fileID: 8548080964515547842, guid: 3ae2ba58029bec34bae675b7cdebe2c0, type: 3}
   hp: 30
   range: 1
-  speed: 1
+  speed: 0.9
   attackSpeed: 1.3
   attackDamage: 10
-  animationConfig: {fileID: 11400000, guid: 682210ca4fbd4de4ba6d91f6eb112503, type: 2}
-  protrait: {fileID: 21300000, guid: 719e0674c2674794784bf063b9c3fae7, type: 3}
+  animationConfig: {fileID: 11400000, guid: 50e07568afe1a4844861aff075409f02, type: 2}
+  protrait: {fileID: 21300000, guid: 5fce4c963c798574983cb5e7f6b8ec97, type: 3}

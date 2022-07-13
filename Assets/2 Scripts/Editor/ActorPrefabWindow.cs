@@ -14,7 +14,7 @@ namespace Osiris
 
         // Content variables
         private bool createContentAssets = true;
-        private string contentSavePath = "4 Content/Actor";
+        private string contentSavePath = "Assets/4 Content/Actor";
 
         [MenuItem("Tools/Osiris/Actor Prefab Window")]
         private static void CreateWindow() {
@@ -44,7 +44,7 @@ namespace Osiris
             }
 
             // Root object
-            GameObject rootObject = new GameObject("PF_Actor_SKU");
+            GameObject rootObject = new GameObject($"PF_Actor_{actorId.ToString()}");
 
             // Empty transform called visuals pivot
             GameObject visualsPivot = new GameObject("visualsPivot");
@@ -52,33 +52,37 @@ namespace Osiris
 
             // Character model
             GameObject model = Instantiate(characterModel, visualsPivot.transform);
-            //Animator animator = model.GetComponent<Animator>();
-            //if(animator == null) {
-            //    Debug.LogError("[ActorPrefabWindow] Character model does not have an animator. No asset has been created.");
-            //    return;
-            //}
-            //animator.applyRootMotion = false;
+            Animator animator = model.GetComponent<Animator>();
+            if (animator == null) {
+                Debug.LogError(
+                    "[ActorPrefabWindow] Character model does not have an animator. No asset has been created." +
+                    "\nTip: go to the Rig tab in the model and check that it is a Humanoid with an avatar created from the model."
+                );
+                DestroyImmediate(rootObject);
+                return;
+            }
+            animator.applyRootMotion = false;
 
             // Actor component
             Actor actorComponent = rootObject.AddComponent<Actor>();
-            //actorComponent.SetEditorDependencies(animator);
+            actorComponent.SetEditorDependencies(animator);
 
             bool success;
-            string prefabName = $"/PF_Actor_{actorId.ToString()}.prefab";
+            string prefabName = $"PF_Actor_{actorId.ToString()}.prefab";
             string prefabPath = Path.Combine(Application.dataPath, prefabSavePath, prefabName);
+            prefabPath = prefabPath.Replace('/', '\\'); // I never know which one is right. Using this to make sure it works
 
-            if(!AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject))) {
-                Debug.LogError("prefab exists already. not doing anythign");
-            }
+            // TODO: what happens if the prefab already exists?
 
             GameObject prefab = PrefabUtility.SaveAsPrefabAsset(rootObject, prefabPath, out success);
 
             if (success) {
                 Debug.Log("[ActorPrefabWindow] New default actor prefab has been created succesfully.");
 
-                EditorUtility.FocusProjectWindow();
-
-                Selection.activeObject = prefab;
+                if (!createContentAssets) { // Only focus it if we are not creating other assets
+                    EditorUtility.FocusProjectWindow();
+                    Selection.activeObject = prefab;
+                }
             } else {
                 Debug.LogError("[ActorPrefabWindow] A problem ocurred while creating a new actor prefab. No asset has been created.");
             }
@@ -89,15 +93,17 @@ namespace Osiris
             if (createContentAssets) {
                 // Actor definition
                 ActorDefinition actorDef = ScriptableObject.CreateInstance<ActorDefinition>();
-                string definitionName = $"/ActorDefinition_{actorId.ToString()}.asset";
+                string definitionName = $"ActorDefinition_{actorId.ToString()}.asset";
                 string definitionPath = Path.Combine(contentSavePath, definitionName);
+                definitionPath = definitionPath.Replace('/', '\\'); // I never know which one is right. Using this to make sure it works
                 AssetDatabase.CreateAsset(actorDef, definitionPath);
                 AssetDatabase.SaveAssets();
 
                 // Animation configuration
                 ActorAnimationConfig animConfig = ScriptableObject.CreateInstance<ActorAnimationConfig>();
-                string animConfigName = $"/ActorAnimationConfig_{actorId.ToString()}.asset";
+                string animConfigName = $"ActorAnimationConfig_{actorId.ToString()}.asset";
                 string animConfigPath = Path.Combine(contentSavePath, animConfigName);
+                animConfigPath = animConfigPath.Replace('/', '\\'); // I never know which one is right. Using this to make sure it works
                 AssetDatabase.CreateAsset(animConfig, animConfigPath);
                 AssetDatabase.SaveAssets();
 

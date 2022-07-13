@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fab76926ac0c89749af5155b63dc0120, type: 3}
-  m_Name: ActorDefinition_KatanaWeeb
+  m_Name: ActorDefinition_DelinquentsTank
   m_EditorClassIdentifier: 
-  id: 8
-  prefab: {fileID: 4613670576249831575, guid: 31d7b68ca0dbf2544979711ac340d753, type: 3}
-  hp: 100
+  id: 0
+  prefab: {fileID: 0}
+  hp: 1000
   range: 1
   speed: 1
-  attackSpeed: 0.5
+  attackSpeed: 1
   attackDamage: 10
-  animationConfig: {fileID: 11400000, guid: 50c5ff7b4f72986459461273e9151c56, type: 2}
-  protrait: {fileID: 21300000, guid: 966c102a5055796478511032f23e4a80, type: 3}
+  animationConfig: {fileID: 0}
+  protrait: {fileID: 0}

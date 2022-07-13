@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b200eb1fd392bc7439fd05916a19cbec, type: 3}
+  m_Name: ActorAnimConfig_DelinquentDps1
+  m_EditorClassIdentifier: 
+  idle: {fileID: -203655887218126122, guid: 1f422bebc3283204c8675ddfa926dc0d, type: 3}
+  walk: {fileID: -203655887218126122, guid: 11e263981d5391a4aa66d62b97540321, type: 3}
+  attack: {fileID: -203655887218126122, guid: 7d5b7f97bbd3f6f4eb259e3868f92f4e, type: 3}
+  attackEventNormalizedTime: 0.41

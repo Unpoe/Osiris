@@ -5,16 +5,16 @@
         None = 0,
 
         // Sports Club
-        TennisPlayer = 1,
-        TeamManager = 2,
-        Judoka = 3,
-        Kendo = 4,
+        SportsClubTank = 1,
+        SportsClubDps1 = 2,
+        SportsClubDps2 = 3,
+        SportsClubSupport = 4,
 
-        // Otaku Club
-        ElfHunter = 5,
-        KnightBoy = 6,
-        Idol = 7,
-        KatanaWeeb = 8,
+        // Delinquents
+        DelinquentsTank = 5,
+        DelinquentsDps1 = 6,
+        DelinquentsDps2 = 7,
+        DelinquentsSupport = 8,
 
 
         Count = 9

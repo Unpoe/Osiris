@@ -944,7 +944,7 @@ GameObject:
   - component: {fileID: 1088668797}
   - component: {fileID: 1088668798}
   m_Layer: 9
-  m_Name: Ground
+  m_Name: Ground (used for BattleEditor)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

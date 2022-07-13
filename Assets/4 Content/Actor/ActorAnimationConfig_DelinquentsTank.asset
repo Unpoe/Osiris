@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b200eb1fd392bc7439fd05916a19cbec, type: 3}
-  m_Name: ActorAnimConfig_Judoka
+  m_Name: ActorAnimationConfig_DelinquentsTank
   m_EditorClassIdentifier: 
-  idle: {fileID: -203655887218126122, guid: 2c8cba2a9dcdafd4ba2202fe639b0357, type: 3}
-  walk: {fileID: -203655887218126122, guid: 1872cb7a4c4ccb4458e0344fabaf8fdb, type: 3}
-  attack: {fileID: -203655887218126122, guid: 2c8cba2a9dcdafd4ba2202fe639b0357, type: 3}
+  idle: {fileID: 0}
+  walk: {fileID: 0}
+  attack: {fileID: 0}
   attackEventNormalizedTime: 1
