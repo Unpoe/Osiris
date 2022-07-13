@@ -19,12 +19,14 @@ namespace Osiris
 
         public bool ally { get; private set; }
 
-        private float hp;
+        private float maxHp;
         private int range;
         private float speed;
         private float rotationSpeed; // This variable is purely visual
         private float attackSpeed; // attacks per second
         private float attackDamage;
+
+        private float hp;
 
         private Battle battle;
         private ActorDefinition actorDefinition;
@@ -72,7 +74,7 @@ namespace Osiris
             this.battleId = battleId;
 
             ally = isAlly;
-            hp = actorDefinition.Hp;
+            hp = maxHp = actorDefinition.Hp;
             range = actorDefinition.Range;
             speed = actorDefinition.Speed;
             rotationSpeed = 7f;
@@ -329,6 +331,17 @@ namespace Osiris
 
         public void ApplyDamage(float amount) {
             hp -= amount;
+        }
+
+        public float GetLifePercentage() {
+            return hp / maxHp;
+        }
+
+        public Vector3 GetLifebarWorldPosition() {
+            Vector3 position = transform.position;
+            position.y += 1.5f;
+
+            return position;
         }
     }
 }

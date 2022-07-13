@@ -12,6 +12,7 @@ namespace Osiris
 
         private ActorFactory actorFactory;
         public HexGrid grid; // This is public so actor can access it
+        private LifebarGroup lifebarGroup;
         private Catalog catalog;
 
         private Gold gold;
@@ -25,9 +26,10 @@ namespace Osiris
 
         private static readonly List<Actor> EMPTY_ACTOR_LIST = new List<Actor>();
 
-        public Battle(ActorFactory actorFactory, HexGrid grid, Catalog catalog, int initialGold) {
+        public Battle(ActorFactory actorFactory, HexGrid grid, LifebarGroup lifebarGroup, Catalog catalog, int initialGold) {
             this.actorFactory = actorFactory;
             this.grid = grid;
+            this.lifebarGroup = lifebarGroup;
             this.catalog = catalog;
 
             timeScale = 1f;
@@ -46,6 +48,7 @@ namespace Osiris
             for (int i = allyActors.Count - 1; i >= 0; i--) {
                 Actor actor = allyActors[i];
                 actor.Clear();
+                lifebarGroup.OnActorRemoved(actor);
                 actorFactory.Reclaim(actor);
             }
             allyActors.Clear();
@@ -53,6 +56,7 @@ namespace Osiris
             for (int i = enemyActors.Count - 1; i >= 0; i--) {
                 Actor actor = enemyActors[i];
                 actor.Clear();
+                lifebarGroup.OnActorRemoved(actor);
                 actorFactory.Reclaim(actor);
             }
             enemyActors.Clear();
@@ -85,6 +89,8 @@ namespace Osiris
 
             UpdateActorList(dt, ref allyActors);
             UpdateActorList(dt, ref enemyActors);
+
+            lifebarGroup.GameUpdate();
         }
 
         public void AddActor(HexCell startingCell, bool isAlly, ActorId actorId) {
@@ -97,11 +103,15 @@ namespace Osiris
 
             List<Actor> actors = isAlly ? allyActors : enemyActors;
             actors.Add(newActor);
+
+            lifebarGroup.OnActorAdded(newActor);
         }
 
         public void RemoveActor(HexCell cell) {
             Actor actor = cell.Actor;
             if (actor != null) {
+                lifebarGroup.OnActorRemoved(actor);
+
                 List<Actor> actors = actor.ally ? allyActors : enemyActors;
                 actors.Remove(actor);
                 actorFactory.Reclaim(actor);
@@ -122,6 +132,7 @@ namespace Osiris
                 Actor actor = actors[i];
                 if (!actor.GameUpdate(dt)) {
                     actor.Clear();
+                    lifebarGroup.OnActorRemoved(actor);
                     int lastIndex = actors.Count - 1;
                     actors[i] = actors[lastIndex];
                     actors.RemoveAt(lastIndex);
