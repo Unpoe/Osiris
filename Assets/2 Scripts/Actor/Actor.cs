@@ -129,6 +129,7 @@ namespace Osiris
 
             // Check for death
             if(hp <= 0) {
+                currentCell.Actor = null;
                 return false;
             }
 
