@@ -15,4 +15,4 @@ MonoBehaviour:
   idle: {fileID: -203655887218126122, guid: a5c27dd7c04a20343bd25f8e11060b5f, type: 3}
   walk: {fileID: -203655887218126122, guid: cb4bb6bb35e65374db49f1bb6ecd262b, type: 3}
   attack: {fileID: -203655887218126122, guid: 88d20f5ea1fb24d4ab8847ad62ec6454, type: 3}
-  attackEventNormalizedTime: 1
+  attackEventNormalizedTime: 0.399
