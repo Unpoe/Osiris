@@ -16,7 +16,15 @@ namespace Osiris
         private bool createContentAssets = true;
         private string contentSavePath = "Assets/4 Content/Actor";
 
-        [MenuItem("Tools/Osiris/Actor Prefab Window")]
+        private Sprite portrait = null;
+
+        private AnimationClip idleAnim = null;
+        private AnimationClip walkAnim = null;
+        private AnimationClip attackAnim = null;
+
+        private const float spaceJumpUnit = 20f;
+
+        [MenuItem("Osiris/Actor Prefab Window")]
         private static void CreateWindow() {
             GetWindow<ActorPrefabWindow>("Actor Prefab Window");
         }
@@ -30,9 +38,21 @@ namespace Osiris
             createContentAssets = EditorGUILayout.Toggle("Create Content Assets", createContentAssets);
             if (createContentAssets) {
                 contentSavePath = EditorGUILayout.TextField("Content Path", contentSavePath);
+
+                GUILayout.Space(spaceJumpUnit);
+
+                portrait = (Sprite)EditorGUILayout.ObjectField("Portrait", portrait, typeof(Sprite), false);
+
+                GUILayout.Space(spaceJumpUnit);
+
+                GUILayout.Label("Animation Configuration", EditorStyles.boldLabel);
+                idleAnim = (AnimationClip)EditorGUILayout.ObjectField("Idle Animation", idleAnim, typeof(AnimationClip), false);
+                walkAnim = (AnimationClip)EditorGUILayout.ObjectField("Walk Animation", walkAnim, typeof(AnimationClip), false);
+                attackAnim = (AnimationClip)EditorGUILayout.ObjectField("Attack Animation", attackAnim, typeof(AnimationClip), false);
             }
 
-            if (GUILayout.Button("Create")) {
+            GUILayout.Space(spaceJumpUnit);
+            if (GUILayout.Button("Export")) {
                 CreatePrefab();
             }
         }
@@ -108,7 +128,13 @@ namespace Osiris
                 AssetDatabase.SaveAssets();
 
                 // Set definition dependencies
-                actorDef.SetEditorDependencies(actorId, prefab, animConfig);
+                animConfig.SetEditorDependencies(idleAnim, walkAnim, attackAnim);
+                actorDef.SetEditorDependencies(actorId, prefab, animConfig, portrait);
+
+                EditorUtility.SetDirty(animConfig);
+                EditorUtility.SetDirty(actorDef);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
 
                 // Set definition to the table
                 string[] assetGUIDs = AssetDatabase.FindAssets("t:ActorTable");

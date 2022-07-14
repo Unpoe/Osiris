@@ -22,27 +22,13 @@ namespace Osiris
             return definitions;
         }
 
-        public IReadOnlyList<ActorDefinition> GetDefinitionsWithoutMocks() {
-            filteredDefinitions.Clear();
-            for(int i = 0; i < definitions.Length; i++) {
-                ActorDefinition actorDef = definitions[i];
-                if(actorDef == mockDefinition) {
-                    continue;
-                }
-
-                filteredDefinitions.Add(actorDef);
-            }
-
-            return filteredDefinitions;
-        }
-
         public ActorDefinition GetDefinition(ActorId id) {
             int index = (int)id;
             if(index < definitions.Length && index >= 0) {
                 return definitions[index];
             }
 
-            return null;
+            return mockDefinition;
         }
     }
 }

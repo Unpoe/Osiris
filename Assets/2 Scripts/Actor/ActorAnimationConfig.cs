@@ -15,5 +15,12 @@ namespace Osiris
         public AnimationClip Walk => walk;
         public AnimationClip Attack => attack;
         public float AttackEventNormalizedTime => attackEventNormalizedTime;
+
+        // Used only in editor
+        public void SetEditorDependencies(AnimationClip idle, AnimationClip walk, AnimationClip attack) {
+            this.idle = idle;
+            this.walk = walk;
+            this.attack = attack;
+        }
     }
 }

@@ -30,10 +30,11 @@ namespace Osiris
         public Sprite Portrait => portrait;
 
         // Used only in editor
-        public void SetEditorDependencies(ActorId id, GameObject prefab, ActorAnimationConfig animationConfig) {
+        public void SetEditorDependencies(ActorId id, GameObject prefab, ActorAnimationConfig animationConfig, Sprite portrait) {
             this.id = id;
             this.prefab = prefab.GetComponent<Actor>();
             this.animationConfig = animationConfig;
+            this.portrait = portrait;
         }
     }
 }

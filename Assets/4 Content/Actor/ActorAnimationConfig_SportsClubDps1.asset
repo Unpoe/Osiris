@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b200eb1fd392bc7439fd05916a19cbec, type: 3}
-  m_Name: ActorAnimConfig_DelinquentDps1
+  m_Name: ActorAnimationConfig_SportsClubDps1
   m_EditorClassIdentifier: 
-  idle: {fileID: -203655887218126122, guid: 1f422bebc3283204c8675ddfa926dc0d, type: 3}
-  walk: {fileID: -203655887218126122, guid: 11e263981d5391a4aa66d62b97540321, type: 3}
-  attack: {fileID: -203655887218126122, guid: 7d5b7f97bbd3f6f4eb259e3868f92f4e, type: 3}
-  attackEventNormalizedTime: 0.41
+  idle: {fileID: -203655887218126122, guid: a5c27dd7c04a20343bd25f8e11060b5f, type: 3}
+  walk: {fileID: -203655887218126122, guid: cb4bb6bb35e65374db49f1bb6ecd262b, type: 3}
+  attack: {fileID: -203655887218126122, guid: 88d20f5ea1fb24d4ab8847ad62ec6454, type: 3}
+  attackEventNormalizedTime: 0.399

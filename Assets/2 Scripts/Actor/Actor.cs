@@ -161,8 +161,9 @@ namespace Osiris
 
             if (target == null) {
                 List<Actor> potentialTargets = battle.GetActorList(!ally);
-                if(potentialTargets.Count > 0) {
-                    target = GetBestTarget(potentialTargets);
+                int distanceToTarget = 0;
+                if (potentialTargets.Count > 0) {
+                    target = GetBestTarget(potentialTargets, out distanceToTarget);
                 }
 
                 if (target == null) {
@@ -174,6 +175,10 @@ namespace Osiris
                 } else {
                     // Being here means that we started without a target and now we have one, so this is the place to initialize things regarding the target
                     movesToReachTargetCount = 0;
+                    // Here we can check if the target that we recently got is in range. If that is the case, prepare the attack
+                    if(distanceToTarget <= range) {
+                        PrepareAttack();
+                    }
                 }
             }
 
@@ -294,7 +299,7 @@ namespace Osiris
             return currentPath[1];
         }
 
-        private Actor GetBestTarget(List<Actor> enemies) {
+        private Actor GetBestTarget(List<Actor> enemies, out int distanceToTarget) {
             POTENTIAL_TARGETS_BUFFER.Clear();
 
             int nearDistance = int.MaxValue;
@@ -310,14 +315,16 @@ namespace Osiris
                         POTENTIAL_TARGETS_BUFFER.Clear();
                         POTENTIAL_TARGETS_BUFFER.Add(enemy);
 
-                        nearDistance = PATH_TO_TARGET_BUFFER.Count;
+                        nearDistance = distance;
                     } else if (distance == nearDistance) {
                         POTENTIAL_TARGETS_BUFFER.Add(enemy);
                     }
                 }
             }
 
-            if(POTENTIAL_TARGETS_BUFFER.Count == 0) {
+            distanceToTarget = nearDistance;
+
+            if (POTENTIAL_TARGETS_BUFFER.Count == 0) {
                 return null;
             }
 
