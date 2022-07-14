@@ -26,10 +26,12 @@ namespace Osiris
             IReadOnlyList<ActorDefinition> definitions = actorTable.GetDefinitions();
             for(int i = 0; i < definitions.Count; i++) {
                 ActorDefinition actorDef = definitions[i];
-                SelectActorPill pill = Instantiate(selectActorPillPrefab, actorPillHolder);
-                pill.Initialize(actorDef, OnActorPillClicked);
-                pill.SetSelected(false);
-                actorPillInstances.Add(pill);
+                if(actorDef.Id != ActorId.None) {
+                    SelectActorPill pill = Instantiate(selectActorPillPrefab, actorPillHolder);
+                    pill.Initialize(actorDef, OnActorPillClicked);
+                    pill.SetSelected(false);
+                    actorPillInstances.Add(pill);
+                }
             }
             // Instantiate an extra pill for the erase button
             SelectActorPill erasePill = Instantiate(selectActorPillPrefab, actorPillHolder);

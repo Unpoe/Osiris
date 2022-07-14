@@ -21,7 +21,7 @@ namespace Osiris
             }
             set {
                 actor = value;
-                SetColor(actor != null ? Color.green : Color.white);
+                //SetColor(actor != null ? Color.green : Color.white);
             }
         }
 
