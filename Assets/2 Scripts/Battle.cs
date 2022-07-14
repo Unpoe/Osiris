@@ -89,18 +89,6 @@ namespace Osiris
             dt *= timeScale;
 #endif
 
-            if (running) {
-                if(enemyActors.Count == 0) {
-                    Debug.Log("Victory!");
-                    return;
-                }
-
-                if(allyActors.Count == 0) {
-                    Debug.Log("Defeat!");
-                    return;
-                }
-            }
-
             UpdateActorList(dt, ref allyActors);
             UpdateActorList(dt, ref enemyActors);
 
