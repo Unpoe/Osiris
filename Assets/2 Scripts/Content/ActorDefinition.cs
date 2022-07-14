@@ -9,7 +9,7 @@ namespace Osiris
         [Space]
         [SerializeField] private Actor prefab = default;
         [Header("Combat")]
-        [SerializeField] private float hp = 1000f;
+        [SerializeField] private float hp = 100f;
         [SerializeField, Min(1)] private int range = 1;
         [SerializeField] private float speed = 1f;
         [SerializeField] private float attackSpeed = 1f; // attacks per second
