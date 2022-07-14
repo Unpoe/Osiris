@@ -82,10 +82,24 @@ namespace Osiris
                 timeScale = 0.5f;
             } else if (Input.GetKeyDown(KeyCode.F5)) {
                 timeScale = 0.25f;
+            } else if (Input.GetKeyDown(KeyCode.F6)) {
+                timeScale = 0f;
             }
 
             dt *= timeScale;
 #endif
+
+            if (running) {
+                if(enemyActors.Count == 0) {
+                    Debug.Log("Victory!");
+                    return;
+                }
+
+                if(allyActors.Count == 0) {
+                    Debug.Log("Defeat!");
+                    return;
+                }
+            }
 
             UpdateActorList(dt, ref allyActors);
             UpdateActorList(dt, ref enemyActors);

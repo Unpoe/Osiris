@@ -16,6 +16,7 @@ namespace Osiris
 
         public bool IsDone => GetPlayable(CurrentClip).IsDone();
 
+        private float idleAnimationDuration;
         private float attackAnimationDuration;
         public float attackEventNormalizedTime { get; private set; }
 
@@ -33,6 +34,7 @@ namespace Osiris
             // Configure Idle
             var clip = AnimationClipPlayable.Create(graph, config.Idle);
             mixer.ConnectInput((int)Clip.Idle, clip, 0);
+            idleAnimationDuration = config.Idle.length;
             // Configure Walk
             clip = AnimationClipPlayable.Create(graph, config.Walk);
             clip.Pause();
@@ -90,6 +92,9 @@ namespace Osiris
                 SetWeight(Clip.Idle, 1f);
                 CurrentClip = Clip.Idle;
             }
+
+            var clip = GetPlayable(Clip.Idle);
+            clip.SetTime(CustomRandom.Range(0f, idleAnimationDuration));
 
             graph.Play();
         }

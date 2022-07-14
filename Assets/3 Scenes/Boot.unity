@@ -284,7 +284,9 @@ MonoBehaviour:
     F4
     = timeScale x0.5
 
-    F5 = timeScale x0.25'
+    F5 = timeScale x0.25
+
+    F6 = timescale x0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
