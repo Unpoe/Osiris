@@ -108,7 +108,7 @@ namespace Osiris
                 AssetDatabase.SaveAssets();
 
                 // Set definition dependencies
-                actorDef.SetEditorDependencies(actorId, actorComponent, animConfig);
+                actorDef.SetEditorDependencies(actorId, prefab, animConfig);
 
                 // Set definition to the table
                 string[] assetGUIDs = AssetDatabase.FindAssets("t:ActorTable");

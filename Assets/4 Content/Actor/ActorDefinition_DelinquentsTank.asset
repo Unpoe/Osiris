@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fab76926ac0c89749af5155b63dc0120, type: 3}
   m_Name: ActorDefinition_DelinquentsTank
   m_EditorClassIdentifier: 
-  id: 0
-  prefab: {fileID: 0}
+  id: 5
+  prefab: {fileID: 1752688214519313165, guid: fb2e1996fd4ef8b40af00a283ccfd274, type: 3}
   hp: 1000
   range: 1
   speed: 1
   attackSpeed: 1
   attackDamage: 10
-  animationConfig: {fileID: 0}
-  protrait: {fileID: 0}
+  animationConfig: {fileID: 11400000, guid: d4e26ab68c24aef4c9c8d556409e3075, type: 2}
+  portrait: {fileID: 21300000, guid: 00727cd111f942b478b091fc7e95867a, type: 3}

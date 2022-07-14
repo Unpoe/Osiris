@@ -17,7 +17,7 @@ namespace Osiris
         [Header("Animation")]
         [SerializeField] private ActorAnimationConfig animationConfig = default;
         [Header("UI")]
-        [SerializeField] private Sprite protrait = default;
+        [SerializeField] private Sprite portrait = default;
 
         public ActorId Id => id;
         public Actor Prefab => prefab;
@@ -27,12 +27,12 @@ namespace Osiris
         public float AttackSpeed => attackSpeed;
         public float AttackDamage => attackDamage;
         public ActorAnimationConfig AnimationConfig => animationConfig;
-        public Sprite Portrait => protrait;
+        public Sprite Portrait => portrait;
 
         // Used only in editor
-        public void SetEditorDependencies(ActorId id, Actor prefab, ActorAnimationConfig animationConfig) {
+        public void SetEditorDependencies(ActorId id, GameObject prefab, ActorAnimationConfig animationConfig) {
             this.id = id;
-            this.prefab = prefab;
+            this.prefab = prefab.GetComponent<Actor>();
             this.animationConfig = animationConfig;
         }
     }
