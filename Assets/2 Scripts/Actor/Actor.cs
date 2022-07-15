@@ -339,6 +339,7 @@ namespace Osiris
 
         public void ApplyDamage(float amount) {
             hp -= amount;
+            battle.floatingNumbersGroup.AddNumber(amount, GetLifebarWorldPosition());
         }
 
         public float GetLifePercentage() {

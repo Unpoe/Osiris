@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 5
   prefab: {fileID: 1752688214519313165, guid: fb2e1996fd4ef8b40af00a283ccfd274, type: 3}
-  hp: 1000
+  hp: 100
   range: 1
   speed: 1
   attackSpeed: 1

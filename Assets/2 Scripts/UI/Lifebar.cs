@@ -19,13 +19,9 @@ namespace Osiris
             fillImage.fillAmount = actor.GetLifePercentage();
 
             Vector3 lifebarWorldPos = actor.GetLifebarWorldPosition();
-            Vector3 screenPoint = mainCamera.WorldToViewportPoint(lifebarWorldPos);
-            Vector2 screenPos = new Vector2(screenPoint.x, screenPoint.y);
-
             RectTransform cachedTransform = transform as RectTransform;
-            cachedTransform.anchorMin = screenPos;
-            cachedTransform.anchorMax = screenPos;
-            cachedTransform.anchoredPosition = Vector2.zero;
+
+            Utils.PositionRectTransformInWorldPos(cachedTransform, lifebarWorldPos, mainCamera);
         }
 
         public bool HasActorAssigned(Actor actor) {

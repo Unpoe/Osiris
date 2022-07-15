@@ -11,8 +11,9 @@ namespace Osiris
         public bool running { get; private set; }
 
         private ActorFactory actorFactory;
-        public HexGrid grid; // This is public so actor can access it
+        public HexGrid grid { get; private set; }
         private LifebarGroup lifebarGroup;
+        public FloatingNumbersGroup floatingNumbersGroup { get; private set; }
         private Catalog catalog;
 
         private Gold gold;
@@ -26,10 +27,11 @@ namespace Osiris
 
         private static readonly List<Actor> EMPTY_ACTOR_LIST = new List<Actor>();
 
-        public Battle(ActorFactory actorFactory, HexGrid grid, LifebarGroup lifebarGroup, Catalog catalog, int initialGold) {
+        public Battle(ActorFactory actorFactory, HexGrid grid, LifebarGroup lifebarGroup, FloatingNumbersGroup floatingNumbersGroup, Catalog catalog, int initialGold) {
             this.actorFactory = actorFactory;
             this.grid = grid;
             this.lifebarGroup = lifebarGroup;
+            this.floatingNumbersGroup = floatingNumbersGroup;
             this.catalog = catalog;
 
             timeScale = 1f;
@@ -93,6 +95,7 @@ namespace Osiris
             UpdateActorList(dt, ref enemyActors);
 
             lifebarGroup.GameUpdate();
+            floatingNumbersGroup.GameUpdate(dt);
         }
 
         public void AddActor(HexCell startingCell, bool isAlly, ActorId actorId) {
