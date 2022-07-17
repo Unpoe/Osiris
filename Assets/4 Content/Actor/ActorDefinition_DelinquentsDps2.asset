@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fab76926ac0c89749af5155b63dc0120, type: 3}
+  m_Name: ActorDefinition_DelinquentsDps2
+  m_EditorClassIdentifier: 
+  id: 7
+  prefab: {fileID: 9116446566823267590, guid: 77f8708bc301e3a4085e309e7b8f2730, type: 3}
+  hp: 100
+  range: 1
+  speed: 1
+  attackSpeed: 1
+  attackDamage: 10
+  animationConfig: {fileID: 11400000, guid: 55a14a0f2fa702642b0588b4923f2675, type: 2}
+  portrait: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
