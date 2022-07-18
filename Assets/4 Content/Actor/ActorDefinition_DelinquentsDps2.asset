@@ -15,9 +15,9 @@ MonoBehaviour:
   id: 7
   prefab: {fileID: 9116446566823267590, guid: 77f8708bc301e3a4085e309e7b8f2730, type: 3}
   hp: 100
-  range: 1
+  range: 4
   speed: 1
-  attackSpeed: 1
+  attackSpeed: 0.7
   attackDamage: 10
   animationConfig: {fileID: 11400000, guid: 55a14a0f2fa702642b0588b4923f2675, type: 2}
-  portrait: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  portrait: {fileID: 21300000, guid: 721b62dab2e851141a8665908bfe7ec5, type: 3}

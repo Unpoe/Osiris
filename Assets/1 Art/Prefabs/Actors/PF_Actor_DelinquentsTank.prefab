@@ -5092,7 +5092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unityAnimator: {fileID: 1109450352940017887}
-  dummy: 0
+  dummy: 1
   battleId: -1
 --- !u!1 &6813682650665467732
 GameObject:
