@@ -891,7 +891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdb726d8cb1d93b4bb1e3d7592cbbd34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugMode: 1
+  debugMode: 0
   hexPrefab: {fileID: 4583671076124398638, guid: 3931700d5abad984a992adf929c3b7c9,
     type: 3}
 --- !u!4 &926810897
