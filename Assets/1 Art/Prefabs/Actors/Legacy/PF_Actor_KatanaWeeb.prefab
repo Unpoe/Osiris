@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5905788210149668221}
   m_Father: {fileID: 0}
@@ -45,6 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unityAnimator: {fileID: 6608944222366903297}
+  chestPivot: {fileID: 5905788210149668221}
+  projectileSpawnPoint: {fileID: 0}
   dummy: 0
   battleId: -1
 --- !u!1 &5905788210149668220
@@ -73,6 +76,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 961381174636279419}
   m_Father: {fileID: 5905788209922963920}

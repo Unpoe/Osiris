@@ -14,6 +14,8 @@ namespace Osiris
         [SerializeField] private float speed = 1f;
         [SerializeField] private float attackSpeed = 1f; // attacks per second
         [SerializeField] private float attackDamage = 10f;
+        [Space]
+        [SerializeField] private bool projectilesOnAttack = false;
         [Header("Animation")]
         [SerializeField] private ActorAnimationConfig animationConfig = default;
         [Header("UI")]
@@ -26,6 +28,7 @@ namespace Osiris
         public float Speed => speed;
         public float AttackSpeed => attackSpeed;
         public float AttackDamage => attackDamage;
+        public bool ProjectilesOnAttack => projectilesOnAttack;
         public ActorAnimationConfig AnimationConfig => animationConfig;
         public Sprite Portrait => portrait;
 

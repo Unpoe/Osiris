@@ -6,6 +6,8 @@ namespace Osiris
     public class Actor : MonoBehaviour
     {
         [SerializeField] private Animator unityAnimator = default;
+        [SerializeField] private Transform chestPivot = default;
+        [SerializeField] private Transform projectileSpawnPoint = default;
 
         [Header("Debug")]
         [SerializeField] private bool dummy = false;
@@ -25,6 +27,8 @@ namespace Osiris
         private float rotationSpeed; // This variable is purely visual
         private float attackSpeed; // attacks per second
         private float attackDamage;
+
+        private bool projectilesOnAttack;
 
         private float hp;
 
@@ -80,6 +84,8 @@ namespace Osiris
             rotationSpeed = 7f;
             attackSpeed = actorDefinition.AttackSpeed;
             attackDamage = actorDefinition.AttackDamage;
+
+            projectilesOnAttack = actorDefinition.ProjectilesOnAttack;
 
             this.battle = battle;
             this.actorDefinition = actorDefinition;
@@ -241,7 +247,11 @@ namespace Osiris
                         attackProgress -= 1f;
 
                         // Perform attack
-                        target.ApplyDamage(attackDamage);
+                        if (projectilesOnAttack) {
+                            battle.AddProjectile(projectileSpawnPoint.position, target, attackDamage);
+                        } else {
+                            target.ApplyDamage(attackDamage);
+                        }
                     }
                 } else {
                     // Here we are not moving but we have a valid target
@@ -351,6 +361,10 @@ namespace Osiris
             position.y += 1.5f;
 
             return position;
+        }
+
+        public Vector3 GetChestPosition() {
+            return chestPivot.position;
         }
     }
 }

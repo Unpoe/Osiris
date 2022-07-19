@@ -1349,6 +1349,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unityAnimator: {fileID: 264889864099237275}
+  chestPivot: {fileID: 5407186489914668888}
+  projectileSpawnPoint: {fileID: 0}
   dummy: 0
   battleId: -1
 --- !u!1 &1528147746146912072

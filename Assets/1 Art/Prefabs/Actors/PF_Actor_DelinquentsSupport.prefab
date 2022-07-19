@@ -6358,6 +6358,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unityAnimator: {fileID: 363573638549589115}
+  chestPivot: {fileID: 4968703254217351369}
+  projectileSpawnPoint: {fileID: 0}
   dummy: 0
   battleId: -1
 --- !u!1 &7547802043615895231

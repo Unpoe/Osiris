@@ -11,6 +11,7 @@ namespace Osiris
         public bool running { get; private set; }
 
         private ActorFactory actorFactory;
+        private ProjectileFactory projectileFactory;
         public HexGrid grid { get; private set; }
         private LifebarGroup lifebarGroup;
         public FloatingNumbersGroup floatingNumbersGroup { get; private set; }
@@ -23,12 +24,15 @@ namespace Osiris
         public IReadOnlyList<Actor> AllyActors => allyActors;
         public IReadOnlyList<Actor> EnemyActors => enemyActors;
 
+        private List<Projectile> projectiles;
+
         private int lastBattleId;
 
         private static readonly List<Actor> EMPTY_ACTOR_LIST = new List<Actor>();
 
-        public Battle(ActorFactory actorFactory, HexGrid grid, LifebarGroup lifebarGroup, FloatingNumbersGroup floatingNumbersGroup, Catalog catalog, int initialGold) {
+        public Battle(ActorFactory actorFactory, ProjectileFactory projectileFactory, HexGrid grid, LifebarGroup lifebarGroup, FloatingNumbersGroup floatingNumbersGroup, Catalog catalog, int initialGold) {
             this.actorFactory = actorFactory;
+            this.projectileFactory = projectileFactory;
             this.grid = grid;
             this.lifebarGroup = lifebarGroup;
             this.floatingNumbersGroup = floatingNumbersGroup;
@@ -40,6 +44,7 @@ namespace Osiris
 
             allyActors = new List<Actor>();
             enemyActors = new List<Actor>();
+            projectiles = new List<Projectile>();
 
             lastBattleId = 0;
 
@@ -94,9 +99,13 @@ namespace Osiris
             UpdateActorList(dt, ref allyActors);
             UpdateActorList(dt, ref enemyActors);
 
+            UpdateProjectileList(dt, ref projectiles);
+
             lifebarGroup.GameUpdate();
             floatingNumbersGroup.GameUpdate(dt);
         }
+
+        #region Actors
 
         public void AddActor(HexCell startingCell, bool isAlly, ActorId actorId) {
             Actor newActor = actorFactory.Get(actorId);
@@ -146,5 +155,30 @@ namespace Osiris
                 }
             }
         }
+
+        #endregion
+
+        #region Projectiles
+
+        public void AddProjectile(Vector3 startingPoint, Actor target, float damage) {
+            Projectile newProjectile = projectileFactory.Get();
+            newProjectile.Initialize(startingPoint, target, damage);
+            projectiles.Add(newProjectile);
+        }
+
+        private void UpdateProjectileList(float dt, ref List<Projectile> projectiles) {
+            for (int i = 0; i < projectiles.Count; i++) {
+                Projectile projectile = projectiles[i];
+                if (!projectile.GameUpdate(dt)) {
+                    int lastIndex = projectiles.Count - 1;
+                    projectiles[i] = projectiles[lastIndex];
+                    projectiles.RemoveAt(lastIndex);
+                    i -= 1;
+                    projectileFactory.Reclaim(projectile);
+                }
+            }
+        }
+
+        #endregion
     }
 }
