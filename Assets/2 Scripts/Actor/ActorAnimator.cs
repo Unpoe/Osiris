@@ -110,7 +110,8 @@ namespace Osiris
             BeginTransition(Clip.Attack);
 
             // Offset the animation to synchronize the visuals and the logic
-            clip.SetTime(attackAnimationDuration * attackEventNormalizedTime);
+            // Not needed because now we offset the attackProgress. I leave this here just in case I go back to this implementation
+            //clip.SetTime(attackAnimationDuration * attackEventNormalizedTime);
         }
 
         private void SetWeight(Clip clip, float weight) {

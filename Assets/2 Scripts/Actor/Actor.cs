@@ -28,6 +28,7 @@ namespace Osiris
         private float attackSpeed; // attacks per second
         private float attackDamage;
 
+        private float attackEventNormalizedTime;
         private bool projectilesOnAttack;
 
         private float hp;
@@ -85,6 +86,7 @@ namespace Osiris
             attackSpeed = actorDefinition.AttackSpeed;
             attackDamage = actorDefinition.AttackDamage;
 
+            attackEventNormalizedTime = actorDefinition.AnimationConfig.AttackEventNormalizedTime;
             projectilesOnAttack = actorDefinition.ProjectilesOnAttack;
 
             this.battle = battle;
@@ -343,7 +345,7 @@ namespace Osiris
         }
 
         private void PrepareAttack() {
-            attackProgress = 0f;
+            attackProgress = 1 - attackEventNormalizedTime;
             animator.PlayAttack(attackSpeed);
         }
 
