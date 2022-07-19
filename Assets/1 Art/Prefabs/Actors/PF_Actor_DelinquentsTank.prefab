@@ -5094,7 +5094,7 @@ MonoBehaviour:
   unityAnimator: {fileID: 1109450352940017887}
   chestPivot: {fileID: 7810687766102935856}
   projectileSpawnPoint: {fileID: 7810687766102935856}
-  dummy: 1
+  dummy: 0
   battleId: -1
 --- !u!1 &6813682650665467732
 GameObject:
